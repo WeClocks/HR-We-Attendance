@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--    <string name="app_name">We-Attendance</string>-->
+    <string name="mapbox_access_token">pk.eyJ1Ijoid2VjbG9ja3MiLCJhIjoiY2xvanA3Y2lhMXk4ajJrcGxlOXkzenczZSJ9.2QbRG8Wkw6bUFNH6UBs7_g</string>
+    <!--    <string name="user_location_permission_explanation">This app needs location permissions to show its functionality.</string>-->
+    <!--    <string name="user_location_permission_not_granted">You didn\'t grant location permissions.</string>-->
+</resources>

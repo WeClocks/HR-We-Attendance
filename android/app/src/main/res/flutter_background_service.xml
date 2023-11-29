@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<job-scheduler
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:network-type="none"
+    android:requires-charging="false"
+    android:requires-device-id="false"
+    android:requires-smallest-width-dp="0"
+    android:task-affinity=""
+    android:uses-feature=""
+    android:required="false"
+    android:foreground-service-type="location"
+    android:is-persistent="true"
+    android:update-current="false"/>
