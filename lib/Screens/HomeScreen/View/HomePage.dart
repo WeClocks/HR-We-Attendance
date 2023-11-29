@@ -303,7 +303,7 @@ class _HomePageState extends State<HomePage> {
                   padding: EdgeInsets.zero,
 
                   itemBuilder: (context) {
-                    return loginController.UserLoginData.value.id == "121" ? [
+                    return loginController.designationData.value.id == "121" ? [
                     PopupMenuItem(
                       child: Text("Profile"),
                       value: 1,
@@ -329,7 +329,7 @@ class _HomePageState extends State<HomePage> {
                   },
                   offset: Offset(0,30),
                   onSelected: (value) async {
-                    if(loginController.UserLoginData.value.id == "121")
+                    if(loginController.designationData.value.id == "121")
                       {
                         if(value == 1)
                         {

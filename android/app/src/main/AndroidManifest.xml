@@ -19,7 +19,7 @@
         tools:replace="android:label"
         android:label="HR-We-Attendance"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/applogo">
         <activity
             android:name=".MainActivity"
             android:exported="true"

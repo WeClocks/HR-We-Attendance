@@ -297,11 +297,12 @@ class _LoginPageState extends State<LoginPage> {
                                   if(LoginData!['success'] == true)
                                   {
                                     UserLoginModel user = LoginData['data'];
-                                    if(user.id != '121')
+                                    StaffDataModel staffOneData = await ApiHelper.apiHelper.getStaffData(staff_id: loginController.UserLoginData.value.id!) ?? StaffDataModel();
+                                    if(staffOneData.id == '121')
                                       {
                                         loginController.UserLoginData.value = LoginData['data'];
                                         SharedPref.sharedpref.setUserLoginData(userdata: loginController.UserLoginData.value);
-                                        StaffDataModel staffOneData = await ApiHelper.apiHelper.getStaffData(staff_id: loginController.UserLoginData.value.id!) ?? StaffDataModel();
+                                        // StaffDataModel staffOneData = await ApiHelper.apiHelper.getStaffData(staff_id: loginController.UserLoginData.value.id!) ?? StaffDataModel();
                                         SharedPref.sharedpref.setUserStaffData(userStaffData: staffOneData);
                                         DesignationsModel? designationOneData = await ApiHelper.apiHelper.getDesignationsIdWise(designation_id: staffOneData.designationId!);
                                         SharedPref.sharedpref.setUserDesignationData(userDesignationdata: designationOneData!);
