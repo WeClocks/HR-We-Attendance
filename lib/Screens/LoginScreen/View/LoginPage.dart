@@ -297,7 +297,7 @@ class _LoginPageState extends State<LoginPage> {
                                   if(LoginData!['success'] == true)
                                   {
                                     UserLoginModel user = LoginData['data'];
-                                    StaffDataModel staffOneData = await ApiHelper.apiHelper.getStaffData(staff_id: loginController.UserLoginData.value.id!) ?? StaffDataModel();
+                                    StaffDataModel staffOneData = await ApiHelper.apiHelper.getStaffData(staff_id: user.id!) ?? StaffDataModel();
                                     if(staffOneData.designationId == '121')
                                       {
                                         loginController.UserLoginData.value = LoginData['data'];
