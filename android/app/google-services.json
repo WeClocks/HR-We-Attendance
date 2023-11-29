@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "891387863088",
+    "project_id": "we-attendance-112f7",
+    "storage_bucket": "we-attendance-112f7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891387863088:android:7771566853941dd145cdf5",
+        "android_client_info": {
+          "package_name": "com.example.hr_we_attendance"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZaRXOvei0SGg_t6B0tPD38l-b8G7Y9nA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891387863088:android:0265b465eec7c73445cdf5",
+        "android_client_info": {
+          "package_name": "com.example.we_attendance"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZaRXOvei0SGg_t6B0tPD38l-b8G7Y9nA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

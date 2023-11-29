@@ -28,7 +28,7 @@ import 'package:hr_we_attendance/Utils/DBHelper.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hr_we_attendance/Utils/SharedPreferance.dart';
 
-// import 'firebase_options.dart';
+import 'firebase_options.dart';
 
 HomeController homeController = Get.put(HomeController());
 LoginController loginController = Get.put(LoginController());
@@ -614,9 +614,9 @@ Future<bool> iosOnBackground(ServiceInstance serviceInstance) async
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
