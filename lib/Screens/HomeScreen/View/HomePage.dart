@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 import 'package:app_settings/app_settings.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:easy_geofencing/easy_geofencing.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:hr_we_attendance/Screens/LoginScreen/Model/StaffDataModel.dart';
 import 'package:intl/intl.dart';
 // import 'package:location/location.dart';
 import 'package:ntp/ntp.dart';
@@ -186,9 +188,9 @@ class _HomePageState extends State<HomePage> {
       });
     }
     else
-      {
-        fetchData();
-      }
+    {
+      fetchData();
+    }
   }
 
 
@@ -210,7 +212,7 @@ class _HomePageState extends State<HomePage> {
                 Center(
                   child: IconButton(
                       onPressed: () async {
-                        EasyLoading.show(status: "Please Wait...");
+                        EasyLoading.show(status: "${'please_wait'.tr}...");
                         List notificationsList = (await ApiHelper.apiHelper.getAllNotificationsData())!;
                         List notificationDataList = notificationsList.where((element) {
                           return (element['user_id'] == loginController.UserLoginData.value.id);
@@ -304,134 +306,218 @@ class _HomePageState extends State<HomePage> {
 
                   itemBuilder: (context) {
                     return loginController.designationData.value.id == "121" ? [
-                    PopupMenuItem(
-                      child: Text("Profile"),
-                      value: 1,
-                    ),
-                    PopupMenuItem(
-                    child: Text("HR Staff Attendance"),value: 2,),
-                    PopupMenuItem(
-                    child: Text("Leave Request"),value: 3,),
-                    PopupMenuItem(
-                    child: Text("Change Password"),value: 4,),
-                    PopupMenuItem(
-                    child: Text("Logout"),value: 5,),
-                    ] : [
                       PopupMenuItem(
-                        child: Text("Profile"),
+                        child: Text("profile".tr),
                         value: 1,
                       ),
                       PopupMenuItem(
-                        child: Text("Change Password"),value: 2,),
+                        value: 2,
+                        child: Text("hr_staff_attendance".tr),),
                       PopupMenuItem(
-                        child: Text("Logout"),value: 3,),
+                        value: 3,
+                        child: Text("leave_request".tr),),
+                      PopupMenuItem(
+                        value: 4,
+                        child: Text("change_language".tr),),
+                      PopupMenuItem(
+                        value: 5,
+                        child: Text("change_password".tr),),
+                      PopupMenuItem(
+                        value: 6,
+                        child: Text("logout".tr),),
+                    ] : [
+                      PopupMenuItem(
+                        value: 1,
+                        child: Text("profile".tr),
+                      ),
+                      PopupMenuItem(
+                        value: 2,
+                        child: Text("change_password".tr),),
+                      PopupMenuItem(
+                        value: 3,
+                        child: Text("change_language".tr),),
+                      PopupMenuItem(
+                        value: 4,
+                        child: Text("logout".tr),),
                     ];
                   },
                   offset: Offset(0,30),
                   onSelected: (value) async {
                     if(loginController.designationData.value.id == "121")
+                    {
+                      if(value == 1)
                       {
-                        if(value == 1)
-                        {
-                          EasyLoading.show(status: "Please Wait...");
-                          Get.to(ProfilePage(),transition: Transition.fadeIn);
-                          EasyLoading.dismiss();
-                        }
-                        else if(value == 2)
-                        {
-                          EasyLoading.show(status: "Please Wait...");
-                          hrController.siteDataList.value = (await ApiHelper.apiHelper.getAllSiteData()) ?? [];
-                          hrController.selectedDate.value = DateTime.now().toIso8601String();
-                          hrController.allAttendanceData.value = (await ApiHelper.apiHelper.getAllStaffAttendance(dateTime: DateTime.parse(hrController.selectedDate.value))) ?? [];
-                          Get.to(const HrStaffAttendancePage(),transition: Transition.fadeIn);
-                          EasyLoading.dismiss();
-                        }
-                        else if(value == 3)
-                        {
-                          EasyLoading.show(status: "Please Wait....");
-                          poLeaveController.filterName.value = "Pending";
-                          await ApiHelper.apiHelper.getPoAllLeaveData().then((value) {
-                            poLeaveController.leaveDataList.value = value!.where((element) {
-                              return element.leaveStatus!.toLowerCase() == poLeaveController.filterName.toLowerCase();
-                            }).toList();
-                            Get.to(const PoLeavePage(),transition: Transition.fadeIn);
-                            EasyLoading.dismiss();
-                          });
-                        }
-                        else if (value == 4)
-                        {
-                          EasyLoading.show(status: "Please Wait...");
-                          passwordController.oldPassword.value.clear();
-                          passwordController.newPassword.value.clear();
-                          passwordController.confNewPassword.value.clear();
-                          Get.to(PassWordVerifyPage(),transition: Transition.fadeIn);
-                          EasyLoading.dismiss();
-                        }
-                        else
-                        {
-                          showDialog(context: context, builder: (context) {
-                            return AlertDialog(
-                              title: Text("Logout?"),
-                              content: Text("Are you sure want to logout?"),
-                              actions: [
-                                ElevatedButton(
-                                    onPressed: () async {
-                                      Get.back();
-                                      SharedPref.sharedpref.insertSync(check: false,key: "login");
-                                      Get.offNamed('login');
-                                    },
-                                    child: Text("Yes",style: TextStyle(color: Colors.white),),style: ElevatedButton.styleFrom(backgroundColor: Colors.green)),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Get.back();
-                                  },
-                                  child: Text("No",style: TextStyle(color: Colors.white),),style: ElevatedButton.styleFrom(backgroundColor: Colors.red),)
-                              ],
-                            );
-                          },);
-                        }
+                        EasyLoading.show(status: "${'please_wait'.tr}...");
+                        Get.to(ProfilePage(),transition: Transition.fadeIn);
+                        EasyLoading.dismiss();
                       }
+                      else if(value == 2)
+                      {
+                        EasyLoading.show(status: "${'please_wait'.tr}...");
+                        hrController.siteDataList.value = (await ApiHelper.apiHelper.getAllSiteData()) ?? [];
+                        hrController.selectedDate.value = DateTime.now().toIso8601String();
+                        hrController.allAttendanceData.value = (await ApiHelper.apiHelper.getAllStaffAttendance(dateTime: DateTime.parse(hrController.selectedDate.value))) ?? [];
+                        Get.to(const HrStaffAttendancePage(),transition: Transition.fadeIn);
+                        EasyLoading.dismiss();
+                      }
+                      else if(value == 3)
+                      {
+                        EasyLoading.show(status: "${'please_wait'.tr}...");
+                        poLeaveController.filterName.value = "Pending";
+                        await ApiHelper.apiHelper.getPoAllLeaveData().then((value) {
+                          poLeaveController.leaveDataList.value = value!.where((element) {
+                            return element.leaveStatus!.toLowerCase() == poLeaveController.filterName.toLowerCase();
+                          }).toList();
+                          Get.to(const PoLeavePage(),transition: Transition.fadeIn);
+                          EasyLoading.dismiss();
+                        });
+                      }
+                      else if (value == 4)
+                      {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return BackdropFilter(
+                              filter: ImageFilter.blur(sigmaY: 3, sigmaX: 3),
+                              child: AlertDialog(
+                                backgroundColor: const Color(0xFF2C2C50),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: homeController.languageList
+                                      .map((e) => ElevatedButton(
+                                      onPressed: () async {
+                                        EasyLoading.show(status: "${'please_wait'.tr}...");
+                                        Locale local = Locale(e['lang'],e['con']);
+                                        Get.updateLocale(local);
+                                        homeController.selectedLanguage.value = e;
+                                        SharedPref.sharedpref.setMapData(key: 'SelectedLanguage', mapData: homeController.selectedLanguage);
+                                        Get.back();
+                                        EasyLoading.dismiss();
+                                      },
+                                      style: ElevatedButton.styleFrom(backgroundColor: Colors.white,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9))),
+                                      child: Center(
+                                        child: Text(e['name'],style: const TextStyle(
+                                          color: Color(0xFF2C2C50),
+                                        ),),
+                                      )))
+                                      .toList(),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                      else if (value == 5)
+                      {
+                        EasyLoading.show(status: "${'please_wait'.tr}...");
+                        passwordController.oldPassword.value.clear();
+                        passwordController.newPassword.value.clear();
+                        passwordController.confNewPassword.value.clear();
+                        Get.to(PassWordVerifyPage(),transition: Transition.fadeIn);
+                        EasyLoading.dismiss();
+                      }
+                      else
+                      {
+                        showDialog(context: context, builder: (context) {
+                          return AlertDialog(
+                            title: Text("${'logout'.tr}?"),
+                            content: Text("${'are_you_sure_want_to'.tr} ${'logout'.tr.toLowerCase()}?"),
+                            actions: [
+                              ElevatedButton(
+                                  onPressed: () async {
+                                    Get.back();
+                                    SharedPref.sharedpref.insertSync(check: false,key: "login");
+                                    Get.offNamed('login');
+                                  },style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                                  child: Text("yes".tr,style: const TextStyle(color: Colors.white),)),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Get.back();
+                                },style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                                child: Text("no".tr,style: const TextStyle(color: Colors.white),),)
+                            ],
+                          );
+                        },);
+                      }
+                    }
                     else
+                    {
+                      if(value == 1)
                       {
-                        if(value == 1)
-                        {
-                          EasyLoading.show(status: "Please Wait...");
-                          Get.to(ProfilePage(),transition: Transition.fadeIn);
-                          EasyLoading.dismiss();
-                        }
-                        else if (value == 2)
-                        {
-                          EasyLoading.show(status: "Please Wait...");
-                          passwordController.oldPassword.value.clear();
-                          passwordController.newPassword.value.clear();
-                          passwordController.confNewPassword.value.clear();
-                          Get.to(PassWordVerifyPage(),transition: Transition.fadeIn);
-                          EasyLoading.dismiss();
-                        }
-                        else
-                        {
-                          showDialog(context: context, builder: (context) {
-                            return AlertDialog(
-                              title: Text("Logout?"),
-                              content: Text("Are you sure want to logout?"),
-                              actions: [
-                                ElevatedButton(
-                                    onPressed: () async {
-                                      Get.back();
-                                      SharedPref.sharedpref.insertSync(check: false,key: "login");
-                                      Get.offNamed('login');
-                                    },
-                                    child: Text("Yes",style: TextStyle(color: Colors.white),),style: ElevatedButton.styleFrom(backgroundColor: Colors.green)),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Get.back();
-                                  },
-                                  child: Text("No",style: TextStyle(color: Colors.white),),style: ElevatedButton.styleFrom(backgroundColor: Colors.red),)
-                              ],
-                            );
-                          },);
-                        }
+                        EasyLoading.show(status: "${'please_wait'.tr}...");
+                        Get.to(ProfilePage(),transition: Transition.fadeIn);
+                        EasyLoading.dismiss();
                       }
+                      else if (value == 2)
+                      {
+                        EasyLoading.show(status: "${'please_wait'.tr}...");
+                        passwordController.oldPassword.value.clear();
+                        passwordController.newPassword.value.clear();
+                        passwordController.confNewPassword.value.clear();
+                        Get.to(PassWordVerifyPage(),transition: Transition.fadeIn);
+                        EasyLoading.dismiss();
+                      }
+                      else if (value == 3)
+                      {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return BackdropFilter(
+                              filter: ImageFilter.blur(sigmaY: 3, sigmaX: 3),
+                              child: AlertDialog(
+                                backgroundColor: const Color(0xFF2C2C50),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: homeController.languageList
+                                      .map((e) => ElevatedButton(
+                                      onPressed: () async {
+                                        EasyLoading.show(status: "${'please_wait'.tr}...");
+                                        Locale local = Locale(e['lang'],e['con']);
+                                        Get.updateLocale(local);
+                                        homeController.selectedLanguage.value = e;
+                                        SharedPref.sharedpref.setMapData(key: 'SelectedLanguage', mapData: homeController.selectedLanguage);
+                                        Get.back();
+                                        EasyLoading.dismiss();
+                                      },
+                                      style: ElevatedButton.styleFrom(backgroundColor: Colors.white,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9))),
+                                      child: Center(
+                                        child: Text(e['lang'] == 'en' ? 'english'.tr : e['lang'] == 'mr' ? 'marathi'.tr : e['lang'] == 'hi' ? 'hindi'.tr : 'gujarati'.tr,style: const TextStyle(
+                                          color: Color(0xFF2C2C50),
+                                        ),),
+                                      )))
+                                      .toList(),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                      else
+                      {
+                        showDialog(context: context, builder: (context) {
+                          return AlertDialog(
+                            title: Text("${'logout'.tr}?"),
+                            content: Text("${'are_you_sure_want_to'.tr} ${'logout'.tr.toLowerCase()}?"),
+                            actions: [
+                              ElevatedButton(
+                                  onPressed: () async {
+                                    Get.back();
+                                    SharedPref.sharedpref.insertSync(check: false,key: "login");
+                                    Get.offNamed('login');
+                                  },
+                                  child: Text("yes".tr,style: TextStyle(color: Colors.white),),style: ElevatedButton.styleFrom(backgroundColor: Colors.green)),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                child: Text("no".tr,style: TextStyle(color: Colors.white),),style: ElevatedButton.styleFrom(backgroundColor: Colors.red),)
+                            ],
+                          );
+                        },);
+                      }
+                    }
                   },
                   child: Icon(Icons.person,color: Color(0xFF5b1aa0)),
                 )
@@ -552,7 +638,7 @@ class _HomePageState extends State<HomePage> {
                           child: DropdownButton(
                             items: homeController.siteDropDownList.map((element) => DropdownMenuItem(value: "${element.name}",child: Text("${element.name}"),onTap: () async {
                               homeController.siteOneDropDownItem.value = element;
-                              EasyLoading.show(status: "Please Wait...");
+                              EasyLoading.show(status: "${'please_wait'.tr}...");
                               // EasyGeofencing.startGeofenceService(
                               //     pointedLatitude: '0.0',
                               //     pointedLongitude: '0.0',
@@ -575,7 +661,7 @@ class _HomePageState extends State<HomePage> {
                             onChanged: (homeController.weAttendanceOneData.value.clockIn != null && homeController.weAttendanceOneData.value.clockOut != null || (loginController.designationData.value.id == null ? false : loginController.designationData.value.id == "16")) ?  (value) {} : (homeController.weAttendanceOneData.value.clockIn != null && homeController.weAttendanceOneData.value.clockOut == null && (loginController.designationData.value.id == null ? true : loginController.designationData.value.id != "16")) ? null :  (value) {},
                             // onChanged: (homeController.weAttendanceOneData.value.clockIn != null && homeController.weAttendanceOneData.value.clockOut != null) ?  (value) {} : (homeController.weAttendanceOneData.value.clockIn != null && homeController.weAttendanceOneData.value.clockOut == null) ? null :  (value) {},
                             value: homeController.siteOneDropDownItem.value.name,
-                            hint: const Text("Choose Your Site",style: TextStyle(color: Colors.grey),),
+                            hint: Text("choose_site".tr,style: const TextStyle(color: Colors.grey),),
 
                           ),
                         ),
@@ -591,7 +677,7 @@ class _HomePageState extends State<HomePage> {
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton(
                             items: homeController.subSiteDropDownList.map((element) => DropdownMenuItem(value: "${element.name}",child: Text("${element.name}"),onTap: () async {
-                              EasyLoading.show(status: "Please Wait...");
+                              EasyLoading.show(status: "${'please_wait'.tr}...");
                               homeController.subSiteOneDropDownItem.value = element;
                               EasyGeofencing.startGeofenceService(
                                   pointedLatitude: '${element.lat}',
@@ -625,7 +711,7 @@ class _HomePageState extends State<HomePage> {
                             onChanged: (homeController.weAttendanceOneData.value.clockIn != null && homeController.weAttendanceOneData.value.clockOut != null || (loginController.designationData.value.id == null ? false : loginController.designationData.value.id == "16")) ?  (value) {} : (homeController.weAttendanceOneData.value.clockIn != null && homeController.weAttendanceOneData.value.clockOut == null && (loginController.designationData.value.id == null ? true : loginController.designationData.value.id != "16")) ? null :  (value) {},
                             // onChanged: (homeController.weAttendanceOneData.value.clockIn != null && homeController.weAttendanceOneData.value.clockOut != null) ?  (value) {} : (homeController.weAttendanceOneData.value.clockIn != null && homeController.weAttendanceOneData.value.clockOut == null) ? null :  (value) {},
                             value: homeController.subSiteOneDropDownItem.value.name,
-                            hint: const Text("Choose Your Sub Site",style: TextStyle(color: Colors.grey),),
+                            hint: Text("choose_sub_site".tr,style: const TextStyle(color: Colors.grey),),
                           ),
                         ),
                       ),
@@ -642,7 +728,7 @@ class _HomePageState extends State<HomePage> {
                             onTap: () {
                               punchOutAnywhere.value = !punchOutAnywhere.value;
                             },
-                            child: const Text("Punch out from anywhere?",),
+                            child: Text("${'punch_out_anywhere'.tr}?",),
                           )
                         ],
                       ) : Container(),
@@ -653,15 +739,15 @@ class _HomePageState extends State<HomePage> {
                           {
                             if(homeController.siteOneDropDownItem.value.name == null || homeController.siteOneDropDownItem.value.name != null ? homeController.siteOneDropDownItem.value.name!.isEmpty : true)
                             {
-                              EasyLoading.showError("Please Select Your Site.");
+                              EasyLoading.showError("${'please'.tr} ${'choose_site'.tr}.");
                             }
                             else if(homeController.siteOneDropDownItem.value.name == null || homeController.subSiteOneDropDownItem.value.name != null ? homeController.subSiteOneDropDownItem.value.name!.isEmpty : true)
                             {
-                              EasyLoading.showError("Please Select Your Sub Site.");
+                              EasyLoading.showError("${'please'.tr} ${'choose_sub_site'.tr}.");
                             }
                             else if(circulerOnOff.value == 1)
                             {
-                              EasyLoading.showError("Please Wait....");
+                              EasyLoading.showError("${'please_wait'.tr}...");
                             }
                             else
                             {
@@ -683,7 +769,7 @@ class _HomePageState extends State<HomePage> {
                                       //   child: C,
                                       // ),
                                       // title: Text("Are you sure want to Punch ${(homeController.weAttendanceOneData.value.punchOut == null || homeController.weAttendanceOneData.value.punchOut!) ? "In" : "Out"} ?",style: const TextStyle(fontSize: 14,),),
-                                      title: Text("Are you sure want to Punch ${(homeController.weAttendanceOneData.value.clockIn == null || homeController.weAttendanceOneData.value.clockOut != null) ? "In" : "Out"} ?",style: const TextStyle(fontSize: 14,),),
+                                      title: Text("${'are_you_sure_want_to'.tr} ${'punch'.tr} ${(homeController.weAttendanceOneData.value.clockIn == null || homeController.weAttendanceOneData.value.clockOut != null) ? "in".tr : "out".tr} ?",style: const TextStyle(fontSize: 14,),),
                                       actions: [
                                         ElevatedButton(
                                           onPressed: (){
@@ -695,7 +781,7 @@ class _HomePageState extends State<HomePage> {
                                                 borderRadius: BorderRadius.circular(9),
                                               )
                                           ),
-                                          child: const Text("No",style: TextStyle(color: Colors.white),),
+                                          child: Text("no".tr,style: const TextStyle(color: Colors.white),),
                                         ),
                                         ElevatedButton(
                                           onPressed: () async {
@@ -731,7 +817,7 @@ class _HomePageState extends State<HomePage> {
                                                               Icon(Icons.info,size: Get.width/6,color: Colors.black,),
                                                               SizedBox(height: Get.width/60,),
                                                               // Text("Attendance Already Done\nNext Punch In\n${DateFormat('dd-MM-yyyy hh:mm a').format(DateTime(homeController.weAttendanceOneData.value.outDateTime!.year,homeController.weAttendanceOneData.value.outDateTime!.month,homeController.weAttendanceOneData.value.outDateTime!.day,homeController.weAttendanceOneData.value.outDateTime!.hour,homeController.weAttendanceOneData.value.outDateTime!.minute).add((const Duration(hours: 12,minutes: 0) - DateTime(homeController.weAttendanceOneData.value.outDateTime!.year,homeController.weAttendanceOneData.value.outDateTime!.month,homeController.weAttendanceOneData.value.outDateTime!.day,homeController.weAttendanceOneData.value.outDateTime!.hour,homeController.weAttendanceOneData.value.outDateTime!.minute).difference(DateTime(homeController.weAttendanceOneData.value.inDateTime!.year,homeController.weAttendanceOneData.value.inDateTime!.month,homeController.weAttendanceOneData.value.inDateTime!.day,homeController.weAttendanceOneData.value.inDateTime!.hour,homeController.weAttendanceOneData.value.inDateTime!.minute)))))} Or After\n${DateTime(homeController.weAttendanceOneData.value.outDateTime!.year,homeController.weAttendanceOneData.value.outDateTime!.month,homeController.weAttendanceOneData.value.outDateTime!.day,homeController.weAttendanceOneData.value.outDateTime!.hour,homeController.weAttendanceOneData.value.outDateTime!.minute).add((const Duration(hours: 12,minutes: 0) - DateTime(homeController.weAttendanceOneData.value.outDateTime!.year,homeController.weAttendanceOneData.value.outDateTime!.month,homeController.weAttendanceOneData.value.outDateTime!.day,homeController.weAttendanceOneData.value.outDateTime!.hour,homeController.weAttendanceOneData.value.outDateTime!.minute).difference(DateTime(homeController.weAttendanceOneData.value.inDateTime!.year,homeController.weAttendanceOneData.value.inDateTime!.month,homeController.weAttendanceOneData.value.inDateTime!.day,homeController.weAttendanceOneData.value.inDateTime!.hour,homeController.weAttendanceOneData.value.inDateTime!.minute)))).difference(DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,DateTime.now().hour,DateTime.now().minute)).inHours}:${DateTime(homeController.weAttendanceOneData.value.outDateTime!.year,homeController.weAttendanceOneData.value.outDateTime!.month,homeController.weAttendanceOneData.value.outDateTime!.day,homeController.weAttendanceOneData.value.outDateTime!.hour,homeController.weAttendanceOneData.value.outDateTime!.minute).add((const Duration(hours: 12,minutes: 0) - DateTime(homeController.weAttendanceOneData.value.outDateTime!.year,homeController.weAttendanceOneData.value.outDateTime!.month,homeController.weAttendanceOneData.value.outDateTime!.day,homeController.weAttendanceOneData.value.outDateTime!.hour,homeController.weAttendanceOneData.value.outDateTime!.minute).difference(DateTime(homeController.weAttendanceOneData.value.inDateTime!.year,homeController.weAttendanceOneData.value.inDateTime!.month,homeController.weAttendanceOneData.value.inDateTime!.day,homeController.weAttendanceOneData.value.inDateTime!.hour,homeController.weAttendanceOneData.value.inDateTime!.minute)))).difference(DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,DateTime.now().hour,DateTime.now().minute)).inMinutes.remainder(60)} Hrs Left",textAlign: TextAlign.center,style: TextStyle(fontSize: 14,),),
-                                                              Text("Attendance Already Done\nNext Punch In\n${DateFormat('dd-MM-yyyy hh:mm a').format(DateTime(homeController.weAttendanceOneData.value.clockOut!.year,homeController.weAttendanceOneData.value.clockOut!.month,homeController.weAttendanceOneData.value.clockOut!.day,homeController.weAttendanceOneData.value.clockOut!.hour,homeController.weAttendanceOneData.value.clockOut!.minute).add((const Duration(hours: 12,minutes: 0) - DateTime(homeController.weAttendanceOneData.value.clockOut!.year,homeController.weAttendanceOneData.value.clockOut!.month,homeController.weAttendanceOneData.value.clockOut!.day,homeController.weAttendanceOneData.value.clockOut!.hour,homeController.weAttendanceOneData.value.clockOut!.minute).difference(DateTime(homeController.weAttendanceOneData.value.clockIn!.year,homeController.weAttendanceOneData.value.clockIn!.month,homeController.weAttendanceOneData.value.clockIn!.day,homeController.weAttendanceOneData.value.clockIn!.hour,homeController.weAttendanceOneData.value.clockIn!.minute)))))} Or After\n${DateTime(homeController.weAttendanceOneData.value.clockOut!.year,homeController.weAttendanceOneData.value.clockOut!.month,homeController.weAttendanceOneData.value.clockOut!.day,homeController.weAttendanceOneData.value.clockOut!.hour,homeController.weAttendanceOneData.value.clockOut!.minute).add((const Duration(hours: 12,minutes: 0) - DateTime(homeController.weAttendanceOneData.value.clockOut!.year,homeController.weAttendanceOneData.value.clockOut!.month,homeController.weAttendanceOneData.value.clockOut!.day,homeController.weAttendanceOneData.value.clockOut!.hour,homeController.weAttendanceOneData.value.clockOut!.minute).difference(DateTime(homeController.weAttendanceOneData.value.clockIn!.year,homeController.weAttendanceOneData.value.clockIn!.month,homeController.weAttendanceOneData.value.clockIn!.day,homeController.weAttendanceOneData.value.clockIn!.hour,homeController.weAttendanceOneData.value.clockIn!.minute)))).difference(DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,DateTime.now().hour,DateTime.now().minute)).inHours}:${DateTime(homeController.weAttendanceOneData.value.clockOut!.year,homeController.weAttendanceOneData.value.clockOut!.month,homeController.weAttendanceOneData.value.clockOut!.day,homeController.weAttendanceOneData.value.clockOut!.hour,homeController.weAttendanceOneData.value.clockOut!.minute).add((const Duration(hours: 12,minutes: 0) - DateTime(homeController.weAttendanceOneData.value.clockOut!.year,homeController.weAttendanceOneData.value.clockOut!.month,homeController.weAttendanceOneData.value.clockOut!.day,homeController.weAttendanceOneData.value.clockOut!.hour,homeController.weAttendanceOneData.value.clockOut!.minute).difference(DateTime(homeController.weAttendanceOneData.value.clockIn!.year,homeController.weAttendanceOneData.value.clockIn!.month,homeController.weAttendanceOneData.value.clockIn!.day,homeController.weAttendanceOneData.value.clockIn!.hour,homeController.weAttendanceOneData.value.clockIn!.minute)))).difference(DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,DateTime.now().hour,DateTime.now().minute)).inMinutes.remainder(60)} Hrs Left",textAlign: TextAlign.center,style: TextStyle(fontSize: 14,),),
+                                                              Text("${'attendance'.tr} ${'already _done'.tr}\n${'next'.tr} ${'punch'.tr} ${'in'.tr}\n${DateFormat('dd-MM-yyyy hh:mm a').format(DateTime(homeController.weAttendanceOneData.value.clockOut!.year,homeController.weAttendanceOneData.value.clockOut!.month,homeController.weAttendanceOneData.value.clockOut!.day,homeController.weAttendanceOneData.value.clockOut!.hour,homeController.weAttendanceOneData.value.clockOut!.minute).add((const Duration(hours: 12,minutes: 0) - DateTime(homeController.weAttendanceOneData.value.clockOut!.year,homeController.weAttendanceOneData.value.clockOut!.month,homeController.weAttendanceOneData.value.clockOut!.day,homeController.weAttendanceOneData.value.clockOut!.hour,homeController.weAttendanceOneData.value.clockOut!.minute).difference(DateTime(homeController.weAttendanceOneData.value.clockIn!.year,homeController.weAttendanceOneData.value.clockIn!.month,homeController.weAttendanceOneData.value.clockIn!.day,homeController.weAttendanceOneData.value.clockIn!.hour,homeController.weAttendanceOneData.value.clockIn!.minute)))))} ${'or'.tr} ${'after'.tr}\n${DateTime(homeController.weAttendanceOneData.value.clockOut!.year,homeController.weAttendanceOneData.value.clockOut!.month,homeController.weAttendanceOneData.value.clockOut!.day,homeController.weAttendanceOneData.value.clockOut!.hour,homeController.weAttendanceOneData.value.clockOut!.minute).add((const Duration(hours: 12,minutes: 0) - DateTime(homeController.weAttendanceOneData.value.clockOut!.year,homeController.weAttendanceOneData.value.clockOut!.month,homeController.weAttendanceOneData.value.clockOut!.day,homeController.weAttendanceOneData.value.clockOut!.hour,homeController.weAttendanceOneData.value.clockOut!.minute).difference(DateTime(homeController.weAttendanceOneData.value.clockIn!.year,homeController.weAttendanceOneData.value.clockIn!.month,homeController.weAttendanceOneData.value.clockIn!.day,homeController.weAttendanceOneData.value.clockIn!.hour,homeController.weAttendanceOneData.value.clockIn!.minute)))).difference(DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,DateTime.now().hour,DateTime.now().minute)).inHours}:${DateTime(homeController.weAttendanceOneData.value.clockOut!.year,homeController.weAttendanceOneData.value.clockOut!.month,homeController.weAttendanceOneData.value.clockOut!.day,homeController.weAttendanceOneData.value.clockOut!.hour,homeController.weAttendanceOneData.value.clockOut!.minute).add((const Duration(hours: 12,minutes: 0) - DateTime(homeController.weAttendanceOneData.value.clockOut!.year,homeController.weAttendanceOneData.value.clockOut!.month,homeController.weAttendanceOneData.value.clockOut!.day,homeController.weAttendanceOneData.value.clockOut!.hour,homeController.weAttendanceOneData.value.clockOut!.minute).difference(DateTime(homeController.weAttendanceOneData.value.clockIn!.year,homeController.weAttendanceOneData.value.clockIn!.month,homeController.weAttendanceOneData.value.clockIn!.day,homeController.weAttendanceOneData.value.clockIn!.hour,homeController.weAttendanceOneData.value.clockIn!.minute)))).difference(DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,DateTime.now().hour,DateTime.now().minute)).inMinutes.remainder(60)} ${'hrs_left'.tr}",textAlign: TextAlign.center,style: TextStyle(fontSize: 14,),),
                                                             ],
                                                           ),
                                                           actions: [
@@ -746,7 +832,7 @@ class _HomePageState extends State<HomePage> {
                                                                       borderRadius: BorderRadius.circular(9),
                                                                     )
                                                                 ),
-                                                                child: const Text("Ok",style: TextStyle(color: Colors.white),),
+                                                                child: Text("ok".tr,style: const TextStyle(color: Colors.white),),
                                                               ),
                                                             ),
                                                           ],
@@ -816,19 +902,23 @@ class _HomePageState extends State<HomePage> {
                                                         clockInAddress: (place.isNotEmpty && place.length >= 2) ? "${place[2].name},${place[0].street},${place[1].subLocality},${place[2].locality},${place[2].postalCode}" : "",
                                                         createdAt: dateTime,
                                                       )).then((value) async {
+                                                        print('snedSTarttttttttttttt11111111111111');
                                                         List notificationAllTokenList = await ApiHelper.apiHelper.getAllNotificationsTokenData() ?? [];
-                                                        List oneNotificationTokenData = notificationAllTokenList.where((element) => element['user_id'] == "121").toList();
-                                                        await ApiHelper.apiHelper.insertNotificationData(title: "Hello HR....", description: "${loginController.UserLoginData.value.name}\nMy Today's Punch In\nTime  :  ${DateFormat('dd-MM-yyyy hh:mm a').format(DateTime.now())}\nFrom  :  ${homeController.siteOneDropDownItem.value.name} --> ${homeController.subSiteOneDropDownItem.value.name}...", ins_date_time: DateTime.now(), user_id: loginController.UserLoginData.value.id!, seen: "false");
+                                                        print("===============snedSTarttttttttttttt2222222222222");
+                                                        StaffDataModel? hrData = await ApiHelper.apiHelper.getUserDesignationWise(designation_id: '121');
+                                                        List oneNotificationTokenData = notificationAllTokenList.where((element) => element['user_id'] == hrData!.staffId!).toList();
+                                                        await ApiHelper.apiHelper.insertNotificationData(title: "Hello HR....", description: "${loginController.UserLoginData.value.name}\nMy Today Punch In\nTime  :  ${DateFormat('dd-MM-yyyy hh:mm a').format(DateTime.now())}\nFrom  :  ${homeController.siteOneDropDownItem.value.name} --> ${homeController.subSiteOneDropDownItem.value.name}...", ins_date_time: DateTime.now(), user_id: hrData!.staffId!, seen: "false");
+                                                        print("snedSTarttttttttttttt33333333333 ${oneNotificationTokenData}");
                                                         if(oneNotificationTokenData.isNotEmpty)
-                                                          {
-                                                            await ApiHelper.apiHelper.sendNotifications(title: "Hello HR....", body: "${loginController.UserLoginData.value.name}\nMy Today's Punch In\nTime  :  ${DateFormat('dd-MM-yyyy hh:mm a').format(DateTime.now())}\nFrom  :  ${homeController.siteOneDropDownItem.value.name} --> ${homeController.subSiteOneDropDownItem.value.name}...", notification_token: oneNotificationTokenData.first['notification_token']);
-                                                          }
+                                                        {
+                                                          await ApiHelper.apiHelper.sendNotifications(title: "Hello HR....", body: "${loginController.UserLoginData.value.name}\nMy Today Punch In\nTime  :  ${DateFormat('dd-MM-yyyy hh:mm a').format(DateTime.now())}\nFrom  :  ${homeController.siteOneDropDownItem.value.name} --> ${homeController.subSiteOneDropDownItem.value.name}...", notification_token: oneNotificationTokenData.first['notification_token']);
+                                                        }
                                                         await ApiHelper.apiHelper.insertTrackingData(trackingModel: TrackingModel(staffId: loginController.UserLoginData.value.id!,gpsActive: "On",createdAt: DateTime.now(),updatedAt: DateTime.now(),long: position.longitude.toString(),lat: position.latitude.toString()));
                                                         await loginController.initializeService();
                                                         homeController.readWeAttendanceOneOnlineData();
-                                                        circulerOnOff.value = 0;
                                                         Timer(const Duration(milliseconds: 300), () {
-                                                          EasyLoading.showSuccess('Punch In Successfully');
+                                                          circulerOnOff.value = 0;
+                                                          EasyLoading.showSuccess('${'punch'.tr} ${'in'.tr} ${'successfully'.tr}');
                                                         });
                                                         // await DBHelper.dbHelper.insertTrackingData(trackingModel: TrackingModel(inDateTime: DateTime.now(),lag: position.longitude.toString(),lat: position.latitude.toString()));
                                                         // tracking();
@@ -868,7 +958,7 @@ class _HomePageState extends State<HomePage> {
                                                     else
                                                     {
                                                       circulerOnOff.value = 0;
-                                                      EasyLoading.showError("Sorry You Are Not In Site\nPlease Go To Your Site");
+                                                      EasyLoading.showError("${'sorry'.tr} ${'you_are_not_in_site'.tr}\n${'please_go_to_your_site'.tr}");
                                                     }
                                                   }
                                                   else
@@ -900,7 +990,7 @@ class _HomePageState extends State<HomePage> {
                                                       circulerOnOff.value = 0;
                                                       homeController.readWeAttendanceOneOnlineData();
                                                       Timer(const Duration(milliseconds: 300), () {
-                                                        EasyLoading.showSuccess('Punch Out Successfully');
+                                                        EasyLoading.showSuccess('${'punch'.tr} ${'out'.tr} ${'successfully'.tr}');
                                                       });
                                                     });
                                                     // await DBHelper.dbHelper.updatePunchInOutOneData(weAttendanceDataModel: PunchInOutDataModel(
@@ -939,7 +1029,7 @@ class _HomePageState extends State<HomePage> {
                                                 borderRadius: BorderRadius.circular(9),
                                               )
                                           ),
-                                          child: const Text("Yes",style: TextStyle(color: Colors.white),),
+                                          child: Text("yes".tr,style: const TextStyle(color: Colors.white),),
                                         ),
                                       ],
                                     );
@@ -949,13 +1039,13 @@ class _HomePageState extends State<HomePage> {
                               else
                               {
                                 // circulerOnOff.value = 0;
-                                EasyLoading.showError("Sorry You Are Not In Site\nPlease Go To Your Site");
+                                EasyLoading.showError("${'sorry'.tr} ${'you_are_not_in_site'.tr}\n${'please_go_to_your_site'.tr}");
                               }
                             }
                           }
                           else
                           {
-                            EasyLoading.showError("Please Check Your Internet");
+                            EasyLoading.showError('please_check_internet'.tr);
                           }
                         },
                         splashColor: const Color(0xd25b1aa0),
@@ -976,7 +1066,7 @@ class _HomePageState extends State<HomePage> {
                                   ],
                                 ),
                                 shape: BoxShape.circle,
-                                boxShadow: [
+                                boxShadow: const [
                                   BoxShadow(
                                       color:  Color(0x475b1aa0),
                                       offset: Offset(5, 15),
@@ -992,11 +1082,11 @@ class _HomePageState extends State<HomePage> {
                                   Icons.ads_click,
                                   color: Colors.white,
                                   size: Get.width / 8,
-                                ) : CircularProgressIndicator(color: Colors.white,),
+                                ) : const CircularProgressIndicator(color: Colors.white,),
                                 circulerOnOff.value == 1 ? SizedBox(height: Get.width/60,) : const SizedBox(),
                                 Text(
                                   // "Punch ${(homeController.weAttendanceOneData.value.punchOut == null || homeController.weAttendanceOneData.value.punchOut!) ? "In" : "Out"}",
-                                  "Punch ${(homeController.weAttendanceOneData.value.clockIn == null || homeController.weAttendanceOneData.value.clockOut != null) ? "In" : "Out"}",
+                                  "${'punch'.tr} ${(homeController.weAttendanceOneData.value.clockIn == null || homeController.weAttendanceOneData.value.clockOut != null) ? "in".tr : "out".tr}",
                                   style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 21,
@@ -1011,7 +1101,7 @@ class _HomePageState extends State<HomePage> {
                         height: Get.width / 20,
                       ),
                       Text(
-                        "You are ${(homeController.officeInOrOut.value) ? "" : "not "}in Site",
+                        (homeController.officeInOrOut.value) ? "you_are_in_site".tr : "you_are_not_in_site".tr,
                         style: TextStyle(color: (homeController.officeInOrOut.value) ? Colors.green : Colors.red, fontSize: 18),
                       ),
                       SizedBox(
@@ -1062,9 +1152,9 @@ class _HomePageState extends State<HomePage> {
                                 style: const TextStyle(
                                   fontSize: 16, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
                               ),
-                              const Text(
-                                "IN Time",
-                                style: TextStyle(
+                              Text(
+                                "${'in'.tr.toUpperCase()} ${'time'.tr}",
+                                style: const TextStyle(
                                   fontSize: 13, color: Colors.grey,),
                               ),
                             ],
@@ -1080,9 +1170,9 @@ class _HomePageState extends State<HomePage> {
                                 style: const TextStyle(
                                   fontSize: 16, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
                               ),
-                              const Text(
-                                "Out Time",
-                                style: TextStyle(
+                              Text(
+                                "${'out'.tr} ${'time'.tr}",
+                                style: const TextStyle(
                                   fontSize: 13, color: Colors.grey,),
                               ),
                             ],
@@ -1098,9 +1188,9 @@ class _HomePageState extends State<HomePage> {
                                 style: const TextStyle(
                                   fontSize: 16, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
                               ),
-                              const Text(
-                                "Working Hrs.",
-                                style: TextStyle(
+                              Text(
+                                "${'working_hrs'.tr}.",
+                                style: const TextStyle(
                                   fontSize: 13, color: Colors.grey,),
                               ),
                             ],
@@ -1126,8 +1216,8 @@ class _HomePageState extends State<HomePage> {
                   curve: Curves.easeInOut,
                   width: Get.width,
                   alignment: Alignment.center,
-                  child: const Text(
-                    "No Internet Connection",
+                  child: Text(
+                    "no_internet_connection".tr,
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -1142,7 +1232,7 @@ class _HomePageState extends State<HomePage> {
                       }
                       else if(index == 2)
                       {
-                        EasyLoading.show(status: "Please Wait...");
+                        EasyLoading.show(status: "${'please_wait'.tr}...");
                         reportController.totalPresent.value = 0;
                         reportController.totalAbsent.value = 0;
                         reportController.reportsList.value = [];
@@ -1155,7 +1245,7 @@ class _HomePageState extends State<HomePage> {
                       }
                       else if(index == 3)
                       {
-                        EasyLoading.show(status: "Please Wait...");
+                        EasyLoading.show(status: "${'please_wait'.tr}...");
                         homeController.leaveReasonTypeFilterList.value = [LeaveTypeDataModel(leaveTypeName: "All")];
                         homeController.leaveTypeFilterOneData.value = LeaveTypeDataModel(leaveTypeName: "All");
                         List<LeaveTypeDataModel>? leaveTypeList = await ApiHelper.apiHelper.getAllLeaveReason();
@@ -1167,7 +1257,7 @@ class _HomePageState extends State<HomePage> {
                       }
                       else if(index == 4)
                       {
-                        EasyLoading.show(status: "Please Wait...");
+                        EasyLoading.show(status: "${'please_wait'.tr}...");
                         hrTrackController.hrTrackOrNot.value = true;
                         hrTrackController.selectedDate.value = DateTime.now().toIso8601String();
                         hrTrackController.siteList.value = [SiteDataModel(name: "All")];
@@ -1186,7 +1276,7 @@ class _HomePageState extends State<HomePage> {
                       }
                       else if(index == 5)
                       {
-                        EasyLoading.show(status: "Please Wait...");
+                        EasyLoading.show(status: "${'please_wait'.tr}...");
                         loginController.problemData.value = (await ApiHelper.apiHelper.getProblem(user_id: loginController.UserLoginData.value.id!))!;
                         Get.to(ProblemPage(),transition: Transition.fadeIn);
                         EasyLoading.dismiss();
@@ -1201,7 +1291,7 @@ class _HomePageState extends State<HomePage> {
                       }
                       else if(index == 2)
                       {
-                        EasyLoading.show(status: "Please Wait...");
+                        EasyLoading.show(status: "${'please_wait'.tr}...");
                         reportController.totalPresent.value = 0;
                         reportController.totalAbsent.value = 0;
                         reportController.reportsList.value = [];
@@ -1213,7 +1303,7 @@ class _HomePageState extends State<HomePage> {
                       }
                       else if(index == 3)
                       {
-                        EasyLoading.show(status: "Please Wait...");
+                        EasyLoading.show(status: "${'please_wait'.tr}...");
                         homeController.leaveReasonTypeFilterList.value = [LeaveTypeDataModel(leaveTypeName: "All")];
                         homeController.leaveTypeFilterOneData.value = LeaveTypeDataModel(leaveTypeName: "All");
                         List<LeaveTypeDataModel>? leaveTypeList = await ApiHelper.apiHelper.getAllLeaveReason();
@@ -1225,35 +1315,35 @@ class _HomePageState extends State<HomePage> {
                       }
                       else if(index == 4)
                       {
-                        EasyLoading.show(status: "Please Wait...");
+                        EasyLoading.show(status: "${'please_wait'.tr}...");
                         loginController.problemData.value = (await ApiHelper.apiHelper.getProblem(user_id: loginController.UserLoginData.value.id!))!;
                         Get.to(ProblemPage(),transition: Transition.fadeIn);
                         EasyLoading.dismiss();
                       }
                     }
                   },
-                  items: loginController.designationData.value.id == "121" ? const [
+                  items: loginController.designationData.value.id == "121" ? [
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.home_filled), label: "Home"),
+                        icon: const Icon(Icons.home_filled), label: "home".tr),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.fmd_good_outlined), label: "Map",),
-                    BottomNavigationBarItem(icon: Icon(Icons.reorder), label: "Report"),
+                      icon: const Icon(Icons.fmd_good_outlined), label: "map".tr,),
+                    BottomNavigationBarItem(icon: Icon(Icons.reorder), label: "report".tr),
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.edit_road), label: "Leave"),
+                        icon: const Icon(Icons.edit_road), label: "leave".tr),
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.location_searching), label: "Track"),
+                        icon: const Icon(Icons.location_searching), label: "track".tr),
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.camera_alt), label: "Problems"),
-                  ] : const [
+                        icon: const Icon(Icons.camera_alt), label: "problems".tr),
+                  ] : [
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.home_filled), label: "Home"),
+                        icon: const Icon(Icons.home_filled), label: "home".tr),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.fmd_good_outlined), label: "Map",),
-                    BottomNavigationBarItem(icon: Icon(Icons.reorder), label: "Report"),
+                      icon: const Icon(Icons.fmd_good_outlined), label: "map".tr,),
+                    BottomNavigationBarItem(icon: const Icon(Icons.reorder), label: "report".tr),
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.edit_road), label: "Leave"),
+                        icon: const Icon(Icons.edit_road), label: "leave".tr),
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.camera_alt), label: "Problems"),
+                        icon: const Icon(Icons.camera_alt), label: "problems".tr),
                   ],
                   type: BottomNavigationBarType.fixed,
                 ),

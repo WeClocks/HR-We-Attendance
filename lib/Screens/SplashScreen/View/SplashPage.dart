@@ -39,6 +39,7 @@ class _Splash_ScreenState extends State<Splash_Screen> with SingleTickerProvider
   void initState() {
     // TODO: implement initState
     // getAllData();
+    readSelectedLanguage();
     readSiteData();
     loginController.login();
     _animationController =
@@ -57,6 +58,23 @@ class _Splash_ScreenState extends State<Splash_Screen> with SingleTickerProvider
     // TODO: implement dispose
     _animationController.dispose();
     super.dispose();
+  }
+
+  Future<void> readSelectedLanguage()
+  async {
+    dynamic selectedLanguage = await SharedPref.sharedpref.readMapData(key: 'SelectedLanguage');
+    print("===================selectedLanguageselectedLanguage $selectedLanguage");
+    if(selectedLanguage == null)
+    {
+      SharedPref.sharedpref.setMapData(key: 'SelectedLanguage', mapData: {'name': 'English','lang': 'en', 'con': 'US'});
+      homeController.selectedLanguage.value = {'name': 'English','lang': 'en', 'con': 'US'};
+    }
+    else
+    {
+      homeController.selectedLanguage.value = selectedLanguage;
+    }
+    Locale locale = Locale(homeController.selectedLanguage['lang'],homeController.selectedLanguage['con']);
+    Get.updateLocale(locale);
   }
 
   Future<void> readSiteData()

@@ -19,24 +19,24 @@ class NotificationsPage extends StatefulWidget {
 
 class _NotificationsPageState extends State<NotificationsPage> {
   NotificationsController notificationsController =
-      Get.put(NotificationsController());
+  Get.put(NotificationsController());
 
   Future<void> updateNotSeenToSeenNotifications()
   async {
     for(int i=0; i<notificationsController.notificationsList.length;)
+    {
+      print("=============idddddddddddddddd $i = ${notificationsController.notificationsList[i]['notification_id']} seennnnnnnn ${notificationsController.notificationsList[i]['seen']}");
+      if(notificationsController.notificationsList[i]['seen'] == "false")
       {
-        print("=============idddddddddddddddd $i = ${notificationsController.notificationsList[i]['notification_id']} seennnnnnnn ${notificationsController.notificationsList[i]['seen']}");
-        if(notificationsController.notificationsList[i]['seen'] == "false")
-          {
-            await ApiHelper.apiHelper.updateNotSeenToSeenNotificationsData(notification_id: notificationsController.notificationsList[i]['notification_id'], seen: "true").then((value) {
-              i++;
-            });
-          }
-        else
-          {
-            i++;
-          }
+        await ApiHelper.apiHelper.updateNotSeenToSeenNotificationsData(notification_id: notificationsController.notificationsList[i]['notification_id'], seen: "true").then((value) {
+          i++;
+        });
       }
+      else
+      {
+        i++;
+      }
+    }
   }
 
   @override
@@ -51,9 +51,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
       child: Scaffold(
         appBar: AppBar(
           iconTheme: const IconThemeData(color: Color(0xFF5b1aa0)),
-          title: const Text(
-            "Notifications",
-            style: TextStyle(color: Color(0xFF5b1aa0), fontSize: 16),
+          title: Text(
+            "notifications".tr,
+            style: const TextStyle(color: Color(0xFF5b1aa0), fontSize: 16),
           ),
           centerTitle: true,
         ),
@@ -64,7 +64,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Lottie.asset('assets/animation/cce.json'),
-              const Center(child: Text("Sorry... Record Not Found",style: TextStyle(color: Colors.black,fontSize: 16,),),),
+              Center(child: Text("${'sorry'.tr}... ${'record_not_found'.tr}",style: const TextStyle(color: Colors.black,fontSize: 16,),),),
             ],
           ),
         ) : ListView.builder(
@@ -119,3 +119,4 @@ class _NotificationsPageState extends State<NotificationsPage> {
     );
   }
 }
+

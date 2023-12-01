@@ -41,14 +41,14 @@ class _MapsPageState extends State<MapsPage> {
     List<TrackingModel>? trackingDataList = await ApiHelper.apiHelper.getTrackingUserIdWise(staff_id: hrTrackController.hrTrackOrNot.value ? hrTrackController.hrAttendanceOneData['staff_id'] : loginController.UserLoginData.value.id!);
     List<TrackingModel> dateWiseTrackingData = [];
     if(hrTrackController.hrTrackOrNot.value)
-      {
-        DateTime date = DateTime.parse(hrTrackController.selectedDate.value);
-        dateWiseTrackingData = trackingDataList == null ? [] : trackingDataList.where((element) => ((DateTime(element.createdAt!.year,element.createdAt!.month,element.createdAt!.day).compareTo(DateTime(date.year,date.month,date.day)) == 0) && (element.gpsActive!.toLowerCase() == "On".toLowerCase()))).toList();
-      }
+    {
+      DateTime date = DateTime.parse(hrTrackController.selectedDate.value);
+      dateWiseTrackingData = trackingDataList == null ? [] : trackingDataList.where((element) => ((DateTime(element.createdAt!.year,element.createdAt!.month,element.createdAt!.day).compareTo(DateTime(date.year,date.month,date.day)) == 0) && (element.gpsActive!.toLowerCase() == "On".toLowerCase()))).toList();
+    }
     else
-      {
-        dateWiseTrackingData = trackingDataList == null ? [] : trackingDataList.where((element) => ((DateTime(element.createdAt!.year,element.createdAt!.month,element.createdAt!.day).compareTo(DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day)) == 0) && (element.gpsActive!.toLowerCase() == "On".toLowerCase()))).toList();
-      }
+    {
+      dateWiseTrackingData = trackingDataList == null ? [] : trackingDataList.where((element) => ((DateTime(element.createdAt!.year,element.createdAt!.month,element.createdAt!.day).compareTo(DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day)) == 0) && (element.gpsActive!.toLowerCase() == "On".toLowerCase()))).toList();
+    }
 
     int index = 0;
     GoogleMapController mapController = await googleMapController.value.future;
@@ -64,26 +64,26 @@ class _MapsPageState extends State<MapsPage> {
     );
     Timer.periodic(const Duration(milliseconds: 300), (timer) async {
       if(index == polylineList.length)
-        {
-          firstPunchInOutLocation.value = LatLng(double.parse(dateWiseTrackingData[0].lat!), double.parse(dateWiseTrackingData[0].long!));
-          firstPunchInOutData.value = dateWiseTrackingData[0];
-          timer.cancel();
-        }
+      {
+        firstPunchInOutLocation.value = LatLng(double.parse(dateWiseTrackingData[0].lat!), double.parse(dateWiseTrackingData[0].long!));
+        firstPunchInOutData.value = dateWiseTrackingData[0];
+        timer.cancel();
+      }
       else
-        {
-          // GoogleMapController controller = await googleMapController.value.future;
-          // controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: firstPunchInOutLocation.value,zoom: 14)));
-          firstPunchInOutLocation.value = LatLng(polylineList[index].latitude, polylineList[index].longitude);
-          firstPunchInOutData.value = dateWiseTrackingData[0];
-          mapController.animateCamera(
-            CameraUpdate.newCameraPosition(
-                CameraPosition(
-                    target: firstPunchInOutLocation.value,
-                    zoom: 18
-                )
-            ),
-          );
-        }
+      {
+        // GoogleMapController controller = await googleMapController.value.future;
+        // controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: firstPunchInOutLocation.value,zoom: 14)));
+        firstPunchInOutLocation.value = LatLng(polylineList[index].latitude, polylineList[index].longitude);
+        firstPunchInOutData.value = dateWiseTrackingData[0];
+        mapController.animateCamera(
+          CameraUpdate.newCameraPosition(
+              CameraPosition(
+                  target: firstPunchInOutLocation.value,
+                  zoom: 18
+              )
+          ),
+        );
+      }
       index++;
     });
   }
@@ -114,58 +114,59 @@ class _MapsPageState extends State<MapsPage> {
     int count = 0;
     polylineProgress.value = 0;
     if(dateWiseTrackingData.isNotEmpty)
+    {
+      markerList.add(
+        Marker(
+            markerId: MarkerId("1"),
+            position: LatLng(double.parse(dateWiseTrackingData[0].lat!), double.parse(dateWiseTrackingData[0].long!))
+        ),
+      );
+      firstPunchInOutData.value = dateWiseTrackingData[0];
+      firstPunchInOutLocation.value = LatLng(double.parse(dateWiseTrackingData[0].lat!), double.parse(dateWiseTrackingData[0].long!));
+      polylineProgress.value = (1 / dateWiseTrackingData.length);
+      print("====================progressssssssssss $polylineProgress ${dateWiseTrackingData.length}");
+      for(int j=0; j<(dateWiseTrackingData.length - 1);)
       {
         markerList.add(
           Marker(
-              markerId: MarkerId("1"),
-              position: LatLng(double.parse(dateWiseTrackingData[0].lat!), double.parse(dateWiseTrackingData[0].long!))
+              markerId: MarkerId("${j+1}"),
+              position: LatLng(double.parse(dateWiseTrackingData[j+1].lat!), double.parse(dateWiseTrackingData[j+1].long!))
           ),
         );
-        firstPunchInOutData.value = dateWiseTrackingData[0];
-        firstPunchInOutLocation.value = LatLng(double.parse(dateWiseTrackingData[0].lat!), double.parse(dateWiseTrackingData[0].long!));
-        polylineProgress.value = (1 / dateWiseTrackingData.length);
-        print("====================progressssssssssss $polylineProgress ${dateWiseTrackingData.length}");
-        for(int j=0; j<(dateWiseTrackingData.length - 1);)
-        {
-          markerList.add(
-            Marker(
-                markerId: MarkerId("${j+1}"),
-                position: LatLng(double.parse(dateWiseTrackingData[j+1].lat!), double.parse(dateWiseTrackingData[j+1].long!))
-            ),
-          );
 
-          PolylineResult polylineResult =
-          await polylinePoints.getRouteBetweenCoordinates(
-            "AIzaSyBpJTPrkpEL-Obocx8RmnpTX-QA2SB2-4E",
-            // PointLatLng(21.1664583, 72.8413321),
-            PointLatLng(double.parse(dateWiseTrackingData[j].lat!), double.parse(dateWiseTrackingData[j].long!)),
-            PointLatLng(double.parse(dateWiseTrackingData[j+1].lat!), double.parse(dateWiseTrackingData[j+1].long!)),
-            // PointLatLng(21.173457, 72.838350),
-          );
+        PolylineResult polylineResult =
+        await polylinePoints.getRouteBetweenCoordinates(
+          "AIzaSyBpJTPrkpEL-Obocx8RmnpTX-QA2SB2-4E",
+          // PointLatLng(21.1664583, 72.8413321),
+          PointLatLng(double.parse(dateWiseTrackingData[j].lat!), double.parse(dateWiseTrackingData[j].long!)),
+          PointLatLng(double.parse(dateWiseTrackingData[j+1].lat!), double.parse(dateWiseTrackingData[j+1].long!)),
+          // travelMode: TravelMode.bicycling
+          // PointLatLng(21.173457, 72.838350),
+        );
 
-          if (polylineResult.points.isNotEmpty) {
-            List<LatLng> polyLines = polylineResult.points
-                .map((e) => LatLng(e.latitude, e.longitude))
-                .toList();
-            polylineList.addAll(polyLines);
-          }
-
-          count++;
-          j++;
-          polylineProgress.value = ((j+1) / (dateWiseTrackingData.length));
-          print("====================progressssssssssss222222222 ${polylineProgress*100} $j $polylineProgress ${dateWiseTrackingData.length}");
+        if (polylineResult.points.isNotEmpty) {
+          List<LatLng> polyLines = polylineResult.points
+              .map((e) => LatLng(e.latitude, e.longitude))
+              .toList();
+          polylineList.addAll(polyLines);
         }
-        print("============ $count ${dateWiseTrackingData.length}");
-        if(count == (dateWiseTrackingData.length - 1))
-        {
-          polylineGetOrNot.value = 1;
-        }
+
+        count++;
+        j++;
+        polylineProgress.value = ((j+1) / (dateWiseTrackingData.length));
+        print("====================progressssssssssss222222222 ${polylineProgress*100} $j $polylineProgress ${dateWiseTrackingData.length}");
       }
-    else
+      print("============ $count ${dateWiseTrackingData.length}");
+      if(count == (dateWiseTrackingData.length - 1))
       {
         polylineGetOrNot.value = 1;
-        firstPunchInOutLocation.value = const LatLng(21.1664583, 72.8413321);
       }
+    }
+    else
+    {
+      polylineGetOrNot.value = 1;
+      firstPunchInOutLocation.value = const LatLng(21.1664583, 72.8413321);
+    }
     // setState(() {});
   }
 
@@ -176,37 +177,37 @@ class _MapsPageState extends State<MapsPage> {
     homeController.totalDestinations.value = 0;
 
     if(trackingAllReport != null)
+    {
+      List<TrackingModel> dateWiseTrackingReport = [];
+      if(hrTrackController.hrTrackOrNot.value)
       {
-        List<TrackingModel> dateWiseTrackingReport = [];
-        if(hrTrackController.hrTrackOrNot.value)
-          {
-            DateTime date = DateTime.parse(hrTrackController.selectedDate.value);
-            dateWiseTrackingReport = trackingAllReport.where((element) => ((DateTime(date.year,date.month,date.day).compareTo(DateTime(element.createdAt!.year,element.createdAt!.month,element.createdAt!.day)) == 0) && (element.gpsActive!.toLowerCase() == "On".toLowerCase()))).toList();
-          }
-        else
-          {
-            dateWiseTrackingReport = trackingAllReport.where((element) => ((DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day).compareTo(DateTime(element.createdAt!.year,element.createdAt!.month,element.createdAt!.day)) == 0) && (element.gpsActive!.toLowerCase() == "On".toLowerCase()))).toList();
-          }
-        if(dateWiseTrackingReport.isNotEmpty)
-          {
-            if(dateWiseTrackingReport.length >= 2)
-              {
-                homeController.totalDestinations.value = Geolocator.distanceBetween(double.parse(dateWiseTrackingReport.first.lat!.toString()), double.parse(dateWiseTrackingReport.first.long!.toString()), double.parse(dateWiseTrackingReport[1].lat!.toString()), double.parse(dateWiseTrackingReport[1].long!.toString()));
-                for(int j=1; j<(dateWiseTrackingReport.length-1);)
-                {
-                  double  destination = Geolocator.distanceBetween(double.parse(dateWiseTrackingReport[j].lat!.toString()), double.parse(dateWiseTrackingReport[j].long!.toString()), double.parse(dateWiseTrackingReport[j+1].lat!.toString()), double.parse(dateWiseTrackingReport[j+1].long!.toString()));
-                  print("dissssssssssss ${dateWiseTrackingReport.length} $destination ${double.parse(dateWiseTrackingReport[j].lat!.toString())}, ${double.parse(dateWiseTrackingReport[j].long!.toString())}, ${double.parse(dateWiseTrackingReport[j+1].lat!.toString())}, ${double.parse(dateWiseTrackingReport[j+1].long!.toString())}");
-                  homeController.totalDestinations.value =  homeController.totalDestinations.value + destination;
-                  j++;
-                }
-              }
-          }
+        DateTime date = DateTime.parse(hrTrackController.selectedDate.value);
+        dateWiseTrackingReport = trackingAllReport.where((element) => ((DateTime(date.year,date.month,date.day).compareTo(DateTime(element.createdAt!.year,element.createdAt!.month,element.createdAt!.day)) == 0) && (element.gpsActive!.toLowerCase() == "On".toLowerCase()))).toList();
       }
+      else
+      {
+        dateWiseTrackingReport = trackingAllReport.where((element) => ((DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day).compareTo(DateTime(element.createdAt!.year,element.createdAt!.month,element.createdAt!.day)) == 0) && (element.gpsActive!.toLowerCase() == "On".toLowerCase()))).toList();
+      }
+      if(dateWiseTrackingReport.isNotEmpty)
+      {
+        if(dateWiseTrackingReport.length >= 2)
+        {
+          homeController.totalDestinations.value = Geolocator.distanceBetween(double.parse(dateWiseTrackingReport.first.lat!.toString()), double.parse(dateWiseTrackingReport.first.long!.toString()), double.parse(dateWiseTrackingReport[1].lat!.toString()), double.parse(dateWiseTrackingReport[1].long!.toString()));
+          for(int j=1; j<(dateWiseTrackingReport.length-1);)
+          {
+            double  destination = Geolocator.distanceBetween(double.parse(dateWiseTrackingReport[j].lat!.toString()), double.parse(dateWiseTrackingReport[j].long!.toString()), double.parse(dateWiseTrackingReport[j+1].lat!.toString()), double.parse(dateWiseTrackingReport[j+1].long!.toString()));
+            print("dissssssssssss ${dateWiseTrackingReport.length} $destination ${double.parse(dateWiseTrackingReport[j].lat!.toString())}, ${double.parse(dateWiseTrackingReport[j].long!.toString())}, ${double.parse(dateWiseTrackingReport[j+1].lat!.toString())}, ${double.parse(dateWiseTrackingReport[j+1].long!.toString())}");
+            homeController.totalDestinations.value =  homeController.totalDestinations.value + destination;
+            j++;
+          }
+        }
+      }
+    }
   }
 
   @override
   void initState() {
-    circleLatLng.value = homeController.subSiteOneDropDownItem.value.lat == null ? LatLng(double.parse('${homeController.siteOneDropDownItem.value.lat}'), double.parse('${homeController.siteOneDropDownItem.value.longs}')) : LatLng(double.parse('${homeController.subSiteOneDropDownItem.value.lat}'), double.parse('${homeController.subSiteOneDropDownItem.value.longs}'));
+    circleLatLng.value = hrTrackController.hrTrackOrNot.value ? hrTrackController.userSubSiteData.value.lat == null ? LatLng(double.parse('${homeController.siteOneDropDownItem.value.lat}'), double.parse('${homeController.siteOneDropDownItem.value.longs}')) : LatLng(double.parse('${hrTrackController.userSubSiteData.value.lat}'), double.parse('${hrTrackController.userSubSiteData.value.longs}')) : homeController.subSiteOneDropDownItem.value.lat == null ? LatLng(double.parse('${homeController.siteOneDropDownItem.value.lat}'), double.parse('${homeController.siteOneDropDownItem.value.longs}')) : LatLng(double.parse('${homeController.subSiteOneDropDownItem.value.lat}'), double.parse('${homeController.subSiteOneDropDownItem.value.longs}'));
     polylineGetOrNot.value = 0;
     // getCurrentLatLog();
     BitmapDescriptor.fromAssetImage(ImageConfiguration.empty, "assets/image/location.png").then((icon) {
@@ -251,33 +252,33 @@ class _MapsPageState extends State<MapsPage> {
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: Color(0xFF5b1aa0)),
           title: Text(
-            "Map${hrTrackController.hrTrackOrNot.value ? " [ ${hrTrackController.hrAttendanceOneData['staff_name']} ]" : ""}",
+            "${'map'.tr}${hrTrackController.hrTrackOrNot.value ? " [ ${hrTrackController.hrAttendanceOneData['staff_name']} ]" : ""}",
             style: const TextStyle(color: Color(0xFF5b1aa0), fontSize: 16),
           ),
           centerTitle: false,
         ),
         body: Obx(() => polylineGetOrNot.value == 0
             ? Center(child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                lottie.Lottie.asset("assets/animation/mapLoad.json",width: Get.width/2,height: Get.width/2),
-                SizedBox(height: Get.width/30,),
-                CircularProgressIndicator(value: polylineProgress.value == 0 ? null : double.parse(polylineProgress.value.toString()),color: Colors.purpleAccent,),
-                SizedBox(height: Get.width/30,),
-                Obx(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            lottie.Lottie.asset("assets/animation/mapLoad.json",width: Get.width/2,height: Get.width/2),
+            SizedBox(height: Get.width/30,),
+            CircularProgressIndicator(value: polylineProgress.value == 0 ? null : double.parse(polylineProgress.value.toString()),color: Colors.purpleAccent,),
+            SizedBox(height: Get.width/30,),
+            Obx(
                   () => Text(
-                    "${(polylineProgress.value * 100).round()}%",
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.purpleAccent,fontWeight: FontWeight.bold,fontSize: 16),
-                  ),
-                ),
-                const Text(
-                  "Please wait... It's take a time while loading map.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.purpleAccent,fontWeight: FontWeight.bold,fontSize: 12),
-                )
-              ],
-            ),)
+                "${(polylineProgress.value * 100).round()}%",
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.purpleAccent,fontWeight: FontWeight.bold,fontSize: 16),
+              ),
+            ),
+            Text(
+              "${'please_wait'.tr}... ${'its_take_a_time_while_loading_map'.tr}.",
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.purpleAccent,fontWeight: FontWeight.bold,fontSize: 12),
+            )
+          ],
+        ),)
         //     : GoogleMap(
         //   initialCameraPosition: CameraPosition(
         //       target: firstPunchInOutLocation.value,
@@ -323,57 +324,57 @@ class _MapsPageState extends State<MapsPage> {
         //   circles: circles,
         // ),),
             : Stack(
-              children: [
-                GoogleMap(
-          initialCameraPosition: CameraPosition(
-                  target: firstPunchInOutLocation.value,
-                  zoom: 18
-          ),
-          myLocationEnabled: true,
-          mapType: homeController.mapType.value ? MapType.satellite : MapType.normal,
-          // markers: {
-          //   Marker(
-          //     markerId: MarkerId("source"),
-          //     position: LatLng(21.1664583, 72.8413321)
-          //   ),
-          //   Marker(
-          //     markerId: MarkerId("destination"),
-          //     position: LatLng(21.173457, 72.838350)
-          //   ),
-          // },
-          // markers: markerList,
-          markers: {
+          children: [
+            GoogleMap(
+              initialCameraPosition: CameraPosition(
+                target: firstPunchInOutLocation.value,
+                zoom: 18,
+              ),
+              myLocationEnabled: true,
+              mapType: homeController.mapType.value ? MapType.satellite : MapType.normal,
+              // markers: {
+              //   Marker(
+              //     markerId: MarkerId("source"),
+              //     position: LatLng(21.1664583, 72.8413321)
+              //   ),
+              //   Marker(
+              //     markerId: MarkerId("destination"),
+              //     position: LatLng(21.173457, 72.838350)
+              //   ),
+              // },
+              // markers: markerList,
+              markers: {
                 Marker(
-                  markerId: const MarkerId("firstPunchInOutLocation"),
-                  position: firstPunchInOutLocation.value,
-                  infoWindow: firstPunchInOutData.value.createdAt == null ? const InfoWindow() : InfoWindow(
-                    title: DateFormat('dd-MM-yyyy hh:mm a').format(firstPunchInOutData.value.createdAt!)
-                  )
+                    markerId: const MarkerId("firstPunchInOutLocation"),
+                    position: firstPunchInOutLocation.value,
+                    infoWindow: firstPunchInOutData.value.createdAt == null ? const InfoWindow() : InfoWindow(
+                        title: DateFormat('dd-MM-yyyy hh:mm a').format(firstPunchInOutData.value.createdAt!)
+                    )
                   // icon: markerIcon.value,
                 ),
                 Marker(
-                  markerId: const MarkerId("currentLocation"),
-                  position: circleLatLng.value,
-                  icon: markerIcon.value,
-                  infoWindow: InfoWindow(
-                    title: "WeClocks Technology"
-                  )
+                    markerId: const MarkerId("currentLocation"),
+                    position: circleLatLng.value,
+                    icon: markerIcon.value,
+                    infoWindow: InfoWindow(
+                        title: "WeClocks Technology"
+                    )
                   // icon: markerIcon.value,
                 )
-          },
-          polylines: {
+              },
+              polylines: {
                 Polyline(
                   polylineId: const PolylineId("route"),
                   points: polylineList,
                   width: 5,
                   color: homeController.mapType.value ? Colors.red : Colors.blue,
                 ),
-          },
-          onMapCreated: (controller) {
+              },
+              onMapCreated: (controller) {
                 print("==================controllerrrrrrrrr $controller");
                 googleMapController.value.complete(controller);
-          },
-          circles: {
+              },
+              circles: {
                 Circle(
                     circleId: CircleId("1"),
                     center: circleLatLng.value,
@@ -382,92 +383,92 @@ class _MapsPageState extends State<MapsPage> {
                     fillColor: homeController.mapType.value ? Colors.red.shade50.withOpacity(0.5) : Colors.red.shade50,
                     strokeWidth: 3
                 )
-          },
-        ),
-                polylineGetOrNot.value == 0
-                    ? Container()
-                    : Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: EdgeInsets.only(top: Get.width/6,right: Get.width/30),
-                    child: InkWell(
-                      onTap: () {
-                        homeController.mapType.value = !homeController.mapType.value;
-                      },
-                      child: Container(
-                        height: Get.width/10.5,
-                        width: Get.width/10.5,
-                        // padding: EdgeInsets.all(Get.width/90),
-                        decoration: BoxDecoration(
-                          color: Colors.white70,
-                          borderRadius: BorderRadius.circular(3),
-                          border: homeController.mapType.value ? Border.all(color: Colors.white70) : null,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              offset: Offset(0, 0),
-                              blurRadius: 2,
-                            )
-                          ]
-                        ),
-                        child: ClipRRect(borderRadius: BorderRadius.circular(3),child: Image.asset("assets/image/${homeController.mapType.value ? 'sateliteMapImage.jpg' : 'normalMapImage.png'}",fit: BoxFit.cover,)),
-                      ),
+              },
+            ),
+            polylineGetOrNot.value == 0
+                ? Container()
+                : Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: EdgeInsets.only(top: Get.width/6,right: Get.width/30),
+                child: InkWell(
+                  onTap: () {
+                    homeController.mapType.value = !homeController.mapType.value;
+                  },
+                  child: Container(
+                    height: Get.width/10.5,
+                    width: Get.width/10.5,
+                    // padding: EdgeInsets.all(Get.width/90),
+                    decoration: BoxDecoration(
+                        color: Colors.white70,
+                        borderRadius: BorderRadius.circular(3),
+                        border: homeController.mapType.value ? Border.all(color: Colors.white70) : null,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey,
+                            offset: Offset(0, 0),
+                            blurRadius: 2,
+                          )
+                        ]
                     ),
+                    child: ClipRRect(borderRadius: BorderRadius.circular(3),child: Image.asset("assets/image/${homeController.mapType.value ? 'sateliteMapImage.jpg' : 'normalMapImage.png'}",fit: BoxFit.cover,)),
                   ),
-                )
-              ],
-            ),),
+                ),
+              ),
+            )
+          ],
+        ),),
         floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
         floatingActionButton: Obx(() => polylineGetOrNot.value == 0
             ? Container()
             : Row(
           mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                FloatingActionButton(
-          onPressed: () {
+          children: [
+            FloatingActionButton(
+              onPressed: () {
                 playPauseLocation();
-          },
-          child: Icon(Icons.play_arrow_rounded,color: Color(0xFF5b1aa0),),
-        ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Color(0xfff0e5ff)
-                  ),
-                  padding: EdgeInsets.all(Get.width/25),
-                  margin: EdgeInsets.only(left: Get.width/30),
-                  child: IntrinsicHeight(
-                    child: Row(
+              },
+              child: Icon(Icons.play_arrow_rounded,color: Color(0xFF5b1aa0),),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Color(0xfff0e5ff)
+              ),
+              padding: EdgeInsets.all(Get.width/25),
+              margin: EdgeInsets.only(left: Get.width/30),
+              child: IntrinsicHeight(
+                child: Row(
+                  children: [
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            Icon(Icons.battery_full_rounded,color: Color(0xFF5b1aa0),),
-                            Text(
-                                "${homeController.batteryPercentage}%",
-                              style: const TextStyle(
-                              color: Color(0xFF5b1aa0),
-                              ),
-                            )
-                          ],
-                        ),
-                        SizedBox(width: Get.width/30,),
-                        Row(
-                          children: [
-                            Icon(Icons.run_circle_outlined,color: Color(0xFF5b1aa0),),
-                            Text(
-                                " ${homeController.totalDestinations.value >= 1000 ? "${(homeController.totalDestinations.value / 1000).toStringAsFixed(1)} km" : "${homeController.totalDestinations.value.toStringAsFixed(1)} m"}",
-                              style: const TextStyle(
-                              color: Color(0xFF5b1aa0),
-                              ),
-                            )
-                          ],
-                        ),
+                        Icon(Icons.battery_full_rounded,color: Color(0xFF5b1aa0),),
+                        Text(
+                          "${homeController.batteryPercentage}%",
+                          style: const TextStyle(
+                            color: Color(0xFF5b1aa0),
+                          ),
+                        )
                       ],
                     ),
-                  ),
-                )
-              ],
-            ),),
+                    SizedBox(width: Get.width/30,),
+                    Row(
+                      children: [
+                        const Icon(Icons.run_circle_outlined,color: Color(0xFF5b1aa0),),
+                        Text(
+                          " ${homeController.totalDestinations.value >= 1000 ? "${(homeController.totalDestinations.value / 1000).toStringAsFixed(1)} km" : "${homeController.totalDestinations.value.toStringAsFixed(1)} m"}",
+                          style: const TextStyle(
+                            color: Color(0xFF5b1aa0),
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),),
 
         // body: FlutterMap(
         //   options: MapOptions(

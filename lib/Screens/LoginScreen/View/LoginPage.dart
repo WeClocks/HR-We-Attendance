@@ -40,32 +40,60 @@ class _LoginPageState extends State<LoginPage> {
                     color: Color(0xff29B5F4),
                     padding: EdgeInsets.only(bottom: Get.width/10),
                     alignment: Alignment.center,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                    child: Stack(
                       children: [
-                        Padding(
-                          padding:  EdgeInsets.only(left: 10),
-                          child: Lottie.asset("assets/animation/BxIqvvVLW6.json",fit: BoxFit.cover),
-                        ),
-                        // SizedBox(width: Get.width/5),
-                        Expanded(
-                          child: Center(
-                            child: Padding(
-                              padding:  EdgeInsets.only(top: 10),
-                              child: Container(
-                                alignment: Alignment.center,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset('assets/image/we.png',fit: BoxFit.cover,width: Get.width/3,height: Get.width/3,),
-                                    AnimatedTextKit(
-                                      animatedTexts: [
-                                        TypewriterAnimatedText('Field Staff Tracking System',speed: const Duration(milliseconds: 200),textStyle: TextStyle(color: Colors.amber))
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding:  EdgeInsets.only(left: 10),
+                              child: Lottie.asset("assets/animation/BxIqvvVLW6.json",fit: BoxFit.cover),
+                            ),
+                            // SizedBox(width: Get.width/5),
+                            Expanded(
+                              child: Center(
+                                child: Padding(
+                                  padding:  EdgeInsets.only(top: 10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset('assets/image/we.png',fit: BoxFit.cover,width: Get.width/3,height: Get.width/3,),
+                                        AnimatedTextKit(
+                                          animatedTexts: [
+                                            TypewriterAnimatedText("fieldstafftrackingsystem".tr,speed: const Duration(milliseconds: 200),textStyle: TextStyle(color: Colors.amber))
+                                          ],
+                                          isRepeatingAnimation: true,
+                                          totalRepeatCount: 1000000000,
+                                        ),
                                       ],
-                                      isRepeatingAnimation: true,
-                                      totalRepeatCount: 1000000000,
                                     ),
-                                  ],
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Container(
+                            // margin: EdgeInsets.only(top: Get.width/75,right: Get.width/75),
+                            padding: EdgeInsets.symmetric(horizontal: Get.width/30,vertical: 0),
+                            child: IntrinsicWidth(
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                  style: TextStyle(fontSize: 12,color: Colors.black),
+                                  items: homeController.languageList.map((element) {
+                                    return DropdownMenuItem(value: '${element['name']}',onTap: () {
+                                      Locale local = Locale(element['lang'],element['con']);
+                                      Get.updateLocale(local);
+                                      homeController.selectedLanguage.value = element;
+                                      SharedPref.sharedpref.setMapData(key: 'SelectedLanguage', mapData: homeController.selectedLanguage);
+                                    },child: Text('${element['name']}'),);
+                                  }).toList(),
+                                  onChanged: (value) {},
+                                  value: homeController.selectedLanguage['name'],
                                 ),
                               ),
                             ),
@@ -88,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                         // mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(height: Get.width/10),
-                          Text("LOGIN - HR",style: TextStyle(color: Colors.orange,fontSize: 18,fontWeight: FontWeight.bold),),
+                          Text("login".tr,style: const TextStyle(color: Colors.orange,fontSize: 18,fontWeight: FontWeight.bold),),
                           SizedBox(height: Get.width/10),
                           Padding(
                             padding: EdgeInsets.only(left: Get.width/20, right: Get.width/20),
@@ -125,12 +153,12 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 //filled: true,
                                 //fillColor: Color(0xFF40dedf),
-                                labelText: "Username",
+                                labelText: "username".tr,
                                 labelStyle: TextStyle(color: Color(0xff29B5F4)),
                               ),
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return "Please Enter Username";
+                                  return "pleaseenterusername".tr;
                                 }
                               },
                             ),
@@ -185,7 +213,7 @@ class _LoginPageState extends State<LoginPage> {
                                         ),
                                         //filled: true,
                                         //fillColor: Color(0xFF40dedf),
-                                        labelText: "Password",
+                                        labelText: "password".tr,
                                         // errorStyle: TextStyle(color: Colors.white),
                                         labelStyle: TextStyle(color: Color(0xff29B5F4)),
                                         hintStyle: TextStyle(
@@ -212,7 +240,7 @@ class _LoginPageState extends State<LoginPage> {
                                     obscureText: loginController.hidePass.value,
                                     validator: (value) {
                                       if (value!.isEmpty) {
-                                        return "Please Enter Password";
+                                        return "pleaseenterpassword".tr;
                                       }
                                     },
                                   ),
@@ -247,7 +275,7 @@ class _LoginPageState extends State<LoginPage> {
                                     //   );
                                     // },);
                                   },
-                                  child: Text("Forgot Password?",style: TextStyle(color: Color(0xff29B5F4)),)),
+                                  child: Text('${"forgotpassword".tr}?',style: TextStyle(color: Color(0xff29B5F4)),)),
                             ),
                           ),
                           SizedBox(
@@ -276,7 +304,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 child: Center(
                                     child: Text(
-                                      "LOGIN",
+                                      "login".tr,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,color: Colors.white),
                                     )),
@@ -292,8 +320,8 @@ class _LoginPageState extends State<LoginPage> {
 
                                 if (key.currentState!
                                     .validate()) {
-                                  EasyLoading.show(status: "Please Wait...");
-                                  Map<String, dynamic>? LoginData = await ApiHelper.apiHelper.userLogin(username: txtEmail.text, password: txtPass.text,language: 'en');
+                                  EasyLoading.show(status: "${'please_wait'.tr}...");
+                                  Map<String, dynamic>? LoginData = await ApiHelper.apiHelper.userLogin(username: txtEmail.text, password: txtPass.text,language: homeController.selectedLanguage['lang']);
                                   if(LoginData!['success'] == true)
                                   {
                                     UserLoginModel user = LoginData['data'];
@@ -302,7 +330,7 @@ class _LoginPageState extends State<LoginPage> {
                                       {
                                         loginController.UserLoginData.value = LoginData['data'];
                                         SharedPref.sharedpref.setUserLoginData(userdata: loginController.UserLoginData.value);
-                                        // StaffDataModel staffOneData = await ApiHelper.apiHelper.getStaffData(staff_id: loginController.UserLoginData.value.id!) ?? StaffDataModel();
+                                        StaffDataModel staffOneData = await ApiHelper.apiHelper.getStaffData(staff_id: loginController.UserLoginData.value.id!) ?? StaffDataModel();
                                         SharedPref.sharedpref.setUserStaffData(userStaffData: staffOneData);
                                         DesignationsModel? designationOneData = await ApiHelper.apiHelper.getDesignationsIdWise(designation_id: staffOneData.designationId!);
                                         SharedPref.sharedpref.setUserDesignationData(userDesignationdata: designationOneData!);
@@ -330,29 +358,29 @@ class _LoginPageState extends State<LoginPage> {
                                         homeController.readWeAttendanceOneOnlineData();
                                         EasyLoading.dismiss();
                                         Get.offNamed('/');
-                                        Get.snackbar("Success", "Login is Successfully", backgroundColor: Colors.green,colorText: Colors.white,padding: EdgeInsets.all(Get.height/130));
+                                        Get.snackbar("success".tr, "login_success".tr, backgroundColor: Colors.green,colorText: Colors.white,padding: EdgeInsets.all(Get.height/130));
                                       }
                                     else
-                                      {
-                                        EasyLoading.showError("Please Enter Only HR Username Or Password");
-                                      }
+                                    {
+                                      EasyLoading.showError("Please Enter Only HR Username Or Password");
+                                    }
                                   }
                                   else
                                   {
                                     EasyLoading.dismiss();
-                                    Get.snackbar("Alert", LoginData['message'],backgroundColor: Colors.red,padding: EdgeInsets.all(Get.height/130),duration: Duration(seconds: 2),colorText: Colors.white);
+                                    Get.snackbar("alert".tr, LoginData['message'],backgroundColor: Colors.red,padding: EdgeInsets.all(Get.height/130),duration: Duration(seconds: 2),colorText: Colors.white);
                                   }
                                 }
                               }
                               else
                               {
-                                EasyLoading.showError("Please Check Your Internet");
+                                EasyLoading.showError("please_check_internet".tr);
                               }
 
                             },
                           ),
                           SizedBox(height: Get.width/30),
-                          Text("Technical Support",style: TextStyle(color: Colors.orange),),
+                          Text("technicalsupport".tr,style: TextStyle(color: Colors.orange),),
                           GestureDetector(
                               onTap: () async {
                                 print("jjjjjjjjj");

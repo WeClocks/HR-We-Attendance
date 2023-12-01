@@ -21,7 +21,7 @@ import 'package:hr_we_attendance/Screens/LoginScreen/Model/UserLoginModel.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart';
 
-class ApiHelper{
+class ApiHelper {
 
   ApiHelper._();
   static ApiHelper apiHelper = ApiHelper._();
@@ -108,11 +108,11 @@ class ApiHelper{
     var response = await http.post(Uri.parse(ApiLink), body: {
       'title': title,
       'description': description,
-      'ins_date_time': "$ins_date_time",
+      'ins_date_time': DateFormat('yyyy-MM-dd hh:mm:ss').format(ins_date_time),
       'user_id': user_id,
       "seen": seen,
     });
-
+    print('nottttttttttttttttDatttttttttttttttt $title ,,, $description,,, ${DateFormat('yyyy-MM-dd hh:mm:ss').format(ins_date_time)} ,,,, $user_id ,,, $seen');
     if (response.statusCode == 200) {
       print("================Inserttttttttt Yesssssssssssss ${response.body}");
     }
@@ -153,7 +153,7 @@ class ApiHelper{
         Uri.parse("https://fcm.googleapis.com/fcm/send"),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "key=AAAAQRd1wLw:APA91bHFihMyCTQyXoPNkOfv-4AW6Ww5V1IVZSPwmWM4jvn7rlf_nr28umqn_TxTw-m1wwM3ymqvzuHEUMmjj0ihaSDdIQILdwRPhYQMACQZUOmrfbrS1iZ0wk7bb-_MKOSgDyM1G9Bm"
+          "Authorization": "key=AAAAz4rbYDA:APA91bHcQ_KgdpDBDx-5NKZC5pNubyzjYy-XJ0kkWUgm5Y9F_7fdqyM3F228ihhxzWzOBlzYLVZp4Bgxq1lJJ5fyes6-6REB0o47FEnY3ATqegVcJ4bogzvyVzxvRn2VtrkTOQ6zfbsf"
         },
         body: jsonEncode(
             {
@@ -661,6 +661,20 @@ class ApiHelper{
     {
       print("========SUCCESSSSS ${response.body}");
     }
+  }
+
+  Future<StaffDataModel?> getUserDesignationWise({required String designation_id})
+  async {
+    String apiLink = "https://weclockstechnology.com/flutter_api/fetch_user_designation_wise.php";
+    var response = await http.post(Uri.parse(apiLink),body: {"designation_id": designation_id});
+
+    if(response.statusCode == 200)
+    {
+      List jsonData = jsonDecode(response.body);
+
+      return jsonData.isEmpty ? null : StaffDataModel.fromJson(jsonData.last);
+    }
+    return null;
   }
 
 }
