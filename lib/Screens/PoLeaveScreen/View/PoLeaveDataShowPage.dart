@@ -37,8 +37,8 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
         appBar: AppBar(
           iconTheme: const IconThemeData(color: Color(0xFF5b1aa0)),
           title: Text(
-            "Leave Details",
-            style: TextStyle(color: Color(0xFF5b1aa0), fontSize: 13),
+            "${'leave'.tr} ${'details'.tr}",
+            style: const TextStyle(color: Color(0xFF5b1aa0), fontSize: 13),
           ),
           centerTitle: true,
           // backgroundColor: const Color(0xFF2C2C50),
@@ -56,7 +56,7 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
                             alignment: Alignment.center,
                             child: InkWell(
                               onTap: () async {
-                                EasyLoading.show(status: "Please Wait...");
+                                EasyLoading.show(status: "${'please_wait'.tr}...");
                                 final String dir = (await getApplicationDocumentsDirectory()).path;
                                 final ByteData data = await NetworkAssetBundle(Uri.parse(poLeaveController.leaveOneData.value.photo!)).load('');
                                 final Uint8List bytes = data.buffer.asUint8List();
@@ -132,8 +132,8 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
                         padding: EdgeInsets.symmetric(horizontal: Get.width/45,vertical: Get.width/75),
                         alignment: Alignment.center,
                         child: Text(
-                          "${poLeaveController.leaveOneData.value.days} days",
-                          style: TextStyle(
+                          "${poLeaveController.leaveOneData.value.days} ${'days'.tr.toLowerCase()}",
+                          style: const TextStyle(
                               color: Color(0xfff0e5ff),
                               fontSize: 11
                           ),
@@ -149,16 +149,16 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
                         StaffModel stafData =snapshot.data!.first;
                         staffModelData.value = stafData;
                         return Text(
-                          "Name : ${stafData.name}",
+                          "${'name'.tr} : ${stafData.name}",
                           style: const TextStyle(
-                              color: Color(0xFF5b1aa0),
+                            color: Color(0xFF5b1aa0),
                           ),
                         );
                       }
-                      return Text(
+                      return const Text(
                         "",
-                        style: const TextStyle(
-                            color: Color(0xFF5b1aa0),
+                        style: TextStyle(
+                          color: Color(0xFF5b1aa0),
                         ),
                       );
                     },
@@ -170,16 +170,16 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
                       {
                         StaffDataModel siteData = snapshot.data!;
                         return Text(
-                          "Site Name : ${siteData.companyName}",
+                          "${'site'.tr} ${'name'.tr} : ${siteData.companyName}",
                           style: const TextStyle(
-                              color: Color(0xFF5b1aa0),
+                            color: Color(0xFF5b1aa0),
                           ),
                         );
                       }
                       return Text(
-                        "Site Name : ",
+                        "${'site'.tr} ${'name'.tr} : ",
                         style: const TextStyle(
-                            color: Color(0xFF5b1aa0),
+                          color: Color(0xFF5b1aa0),
                         ),
                       );
                     },
@@ -191,16 +191,16 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
                       {
                         SubSiteDataModel siteData = snapshot.data!.first;
                         return Text(
-                          "Site Name : ${siteData.name}",
+                          "${'sub'.tr} ${'site'.tr} ${'name'.tr} : ${siteData.name}",
                           style: const TextStyle(
-                              color: Color(0xFF5b1aa0),
+                            color: Color(0xFF5b1aa0),
                           ),
                         );
                       }
                       return Text(
-                        "Site Name : ",
+                        "${'sub'.tr} ${'site'.tr} ${'name'.tr} : ",
                         style: const TextStyle(
-                            color: Color(0xFF5b1aa0),
+                          color: Color(0xFF5b1aa0),
                         ),
                       );
                     },
@@ -212,7 +212,7 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
                       {
                         LeaveTypeDataModel leaveTypeOneData = snapshot.data!.first;
                         return Text(
-                          "${leaveTypeOneData.leaveTypeName} Leave",
+                          "${leaveTypeOneData.leaveTypeName} ${'leave'.tr}",
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF5b1aa0),
@@ -220,7 +220,7 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
                         );
                       }
                       return Text(
-                        "${poLeaveController.leaveOneData.value.leaveTypeId} Leave",
+                        "${poLeaveController.leaveOneData.value.leaveTypeId} ${'leave'.tr}",
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF5b1aa0),
@@ -230,8 +230,8 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
                   ),
                   SizedBox(height: Get.width/90,),
                   Text(
-                    "Reason: ${poLeaveController.leaveOneData.value.reason}",
-                    style: TextStyle(
+                    "${'reason'.tr}: ${poLeaveController.leaveOneData.value.reason}",
+                    style: const TextStyle(
                       fontSize: 12,
                       color: Color(0xFF5b1aa0),
                     ),
@@ -250,55 +250,55 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     if(poLeaveController.filterName.value.toLowerCase() == "Accept".toLowerCase())
-                      {
-                        EasyLoading.showError("Sorry this leave already accepted");
-                      }
+                    {
+                      EasyLoading.showError("${'sorry'.tr} ${'this'.tr.toLowerCase()} ${'leave'.tr.toLowerCase()} ${'already'.tr.toLowerCase()} ${'accepted'.tr}");
+                    }
                     else
-                      {
-                        showDialog(context: context, builder: (context) {
-                          return AlertDialog(
-                            title: const Text("Accept?"),
-                            content: const Text("Are you sure want to accept this Leave?"),
-                            actions: [
-                              ElevatedButton(
-                                  onPressed: () async {
-                                    EasyLoading.show(status: "Please Wait...");
-                                    await ApiHelper.apiHelper.updateOneLeaveAcceptRejectData(leaveDataModel: LeaveDataModel(
-                                        leaveId: poLeaveController.leaveOneData.value.leaveId,
-                                        leaveStatus: "Accept",
-                                        leaveStatusReason: "",
-                                        leaveStatusDateTime: DateTime.now(),
-                                        aprovedId: "${loginController.UserLoginData.value.id}"
-                                    )).then((value) async {
-                                      List notificationAllTokenList = await ApiHelper.apiHelper.getAllNotificationsTokenData() ?? [];
-                                      List oneNotificationTokenData = notificationAllTokenList.where((element) => element['user_id'] == poLeaveController.leaveOneData.value.userId!).toList();
-                                      await ApiHelper.apiHelper.insertNotificationData(title: "Hello ${staffModelData.value.name}...", description: "Your leave accepted successfully\n${leaveTypeData.value.leaveTypeName} leave from   ''${DateFormat('dd-MM-yyyy').format(DateTime.parse(poLeaveController.leaveOneData.value.startDate!))}''   to   ''${DateFormat('dd-MM-yyyy').format(DateTime.parse(poLeaveController.leaveOneData.value.endDate!))}''\nFor ''${poLeaveController.leaveOneData.value.days}'' Days...", ins_date_time: DateTime.now(), user_id: loginController.UserLoginData.value.id!, seen: "false");
-                                      if(oneNotificationTokenData.isNotEmpty)
-                                      {
-                                        await ApiHelper.apiHelper.sendNotifications(title: "Hello ${staffModelData.value.name}...", body: "Your leave accepted successfully\n${leaveTypeData.value.leaveTypeName} leave from   ''${DateFormat('dd-MM-yyyy').format(DateTime.parse(poLeaveController.leaveOneData.value.startDate!))}''   to   ''${DateFormat('dd-MM-yyyy').format(DateTime.parse(poLeaveController.leaveOneData.value.endDate!))}''\nFor ''${poLeaveController.leaveOneData.value.days}'' Days...", notification_token: oneNotificationTokenData.first['notification_token']);
-                                      }
-                                      await ApiHelper.apiHelper.getPoAllLeaveData().then((value) {
-                                        poLeaveController.leaveDataList.value = value!.where((element) => element.leaveStatus!.toLowerCase() == poLeaveController.filterName.toLowerCase()).toList();
-                                        EasyLoading.dismiss();
-                                        Timer(const Duration(milliseconds: 500), () {
-                                          EasyLoading.showSuccess("Leave Status Update Successfully");
-                                          Get.back();
-                                          Get.back();
-                                        });
+                    {
+                      showDialog(context: context, builder: (context) {
+                        return AlertDialog(
+                          title: Text("${'accept'.tr}?"),
+                          content: Text("${'are_you_sure_want_to'.tr} ${'accept'.tr.toLowerCase()} ${'this'.tr.toLowerCase()} ${'leave'.tr}?"),
+                          actions: [
+                            ElevatedButton(
+                                onPressed: () async {
+                                  EasyLoading.show(status: "${'please_wait'.tr}...");
+                                  await ApiHelper.apiHelper.updateOneLeaveAcceptRejectData(leaveDataModel: LeaveDataModel(
+                                      leaveId: poLeaveController.leaveOneData.value.leaveId,
+                                      leaveStatus: "Accept",
+                                      leaveStatusReason: "",
+                                      leaveStatusDateTime: DateTime.now(),
+                                      aprovedId: "${loginController.UserLoginData.value.id}"
+                                  )).then((value) async {
+                                    List notificationAllTokenList = await ApiHelper.apiHelper.getAllNotificationsTokenData() ?? [];
+                                    List oneNotificationTokenData = notificationAllTokenList.where((element) => element['user_id'] == poLeaveController.leaveOneData.value.userId!).toList();
+                                    await ApiHelper.apiHelper.insertNotificationData(title: "Hello ${staffModelData.value.name}...", description: "Your leave accepted successfully\n${leaveTypeData.value.leaveTypeName} leave from   ''${DateFormat('dd-MM-yyyy').format(DateTime.parse(poLeaveController.leaveOneData.value.startDate!))}''   to   ''${DateFormat('dd-MM-yyyy').format(DateTime.parse(poLeaveController.leaveOneData.value.endDate!))}''\nFor ''${poLeaveController.leaveOneData.value.days}'' Days...", ins_date_time: DateTime.now(), user_id: poLeaveController.leaveOneData.value.userId!, seen: "false");
+                                    if(oneNotificationTokenData.isNotEmpty)
+                                    {
+                                      await ApiHelper.apiHelper.sendNotifications(title: "Hello ${staffModelData.value.name}...", body: "Your leave accepted successfully\n${leaveTypeData.value.leaveTypeName} leave from   ''${DateFormat('dd-MM-yyyy').format(DateTime.parse(poLeaveController.leaveOneData.value.startDate!))}''   to   ''${DateFormat('dd-MM-yyyy').format(DateTime.parse(poLeaveController.leaveOneData.value.endDate!))}''\nFor ''${poLeaveController.leaveOneData.value.days}'' Days...", notification_token: oneNotificationTokenData.first['notification_token']);
+                                    }
+                                    await ApiHelper.apiHelper.getPoAllLeaveData().then((value) {
+                                      poLeaveController.leaveDataList.value = value!.where((element) => element.leaveStatus!.toLowerCase() == poLeaveController.filterName.toLowerCase()).toList();
+                                      EasyLoading.dismiss();
+                                      Timer(const Duration(milliseconds: 500), () {
+                                        EasyLoading.showSuccess("${'leave'.tr} ${'status'.tr} ${'update'.tr} ${'successfully'.tr}");
+                                        Get.back();
+                                        Get.back();
                                       });
                                     });
+                                  });
 
-                                  },style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                                  child: const Text("Yes",style: TextStyle(color: Colors.white),)),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Get.back();
-                                },style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                                child: const Text("No",style: TextStyle(color: Colors.white),),)
-                            ],
-                          );
-                        },);
-                      }
+                                },style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                                child: Text("yes".tr,style: TextStyle(color: Colors.white),)),
+                            ElevatedButton(
+                              onPressed: () {
+                                Get.back();
+                              },style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                              child: Text("no".tr,style: TextStyle(color: Colors.white),),)
+                          ],
+                        );
+                      },);
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF5b1aa0),
@@ -306,8 +306,8 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
                           borderRadius: BorderRadius.circular(9)
                       )
                   ),
-                  child: const Text(
-                    "Accept",
+                  child: Text(
+                    "accept".tr,
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold
@@ -321,14 +321,14 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
                   onPressed: () {
                     if(poLeaveController.filterName.value.toLowerCase() == "Reject".toLowerCase())
                     {
-                      EasyLoading.showError("Sorry this leave already rejected");
+                      EasyLoading.showError("${'sorry'.tr} ${'this'.tr.toLowerCase()} ${'leave'.tr.toLowerCase()} ${'already'.tr.toLowerCase()} ${'rejected'.tr.toLowerCase()}");
                     }
                     else
                     {
                       showDialog(context: context, builder: (context) {
                         return AlertDialog(
-                          title: const Text("Reject?"),
-                          content: const Text("Are you sure want to reject this Leave?"),
+                          title: Text("${'reject'.tr}?"),
+                          content: Text("${'are_you_sure_want_to'.tr} ${'reject'.tr.toLowerCase()} ${'this'.tr.toLowerCase()} ${'leave'.tr.toLowerCase()}?"),
                           actions: [
                             ElevatedButton(
                                 onPressed: () async {
@@ -337,15 +337,15 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
                                   GlobalKey<FormState> key = GlobalKey<FormState>();
                                   showDialog(context: context, builder: (context) {
                                     return AlertDialog(
-                                      title: const Text.rich(
+                                      title: Text.rich(
                                           TextSpan(
                                               children: [
                                                 TextSpan(
-                                                    text: "Why?\n"
+                                                    text: "${'why'.tr}?\n"
                                                 ),
                                                 TextSpan(
-                                                    text: "Why reject this leave?",
-                                                    style: TextStyle(
+                                                    text: "${'why'.tr} ${'reject'.tr.toLowerCase()} ${'this'.tr.toLowerCase()} ${'leave'.tr.toLowerCase()}?",
+                                                    style: const TextStyle(
                                                         fontSize: 14
                                                     )
                                                 )
@@ -358,7 +358,7 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
                                           controller: txtReason,
                                           maxLines: 3,
                                           decoration: InputDecoration(
-                                            label: Text("Reason"),
+                                            label: Text("reason".tr),
                                             contentPadding: EdgeInsets.all(Get.width/45),
 
                                             border: OutlineInputBorder(),
@@ -366,7 +366,7 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
                                           validator: (value) {
                                             if(value!.isEmpty)
                                             {
-                                              return "Please Enter Reason....";
+                                              return "${'please'.tr} ${'enter_the'.tr} ${'reason'.tr}....";
                                             }
                                             return null;
                                           },
@@ -374,36 +374,36 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
                                       ),
                                       actions: [
                                         ElevatedButton(
-                                          onPressed: () async {
-                                            if(key.currentState!.validate())
+                                            onPressed: () async {
+                                              if(key.currentState!.validate())
                                               {
-                                                    EasyLoading.show(status: "Please Wait...");
-                                                    await ApiHelper.apiHelper.updateOneLeaveAcceptRejectData(leaveDataModel: LeaveDataModel(
-                                                        leaveId: poLeaveController.leaveOneData.value.leaveId,
-                                                        leaveStatus: "Reject",
-                                                        leaveStatusReason: txtReason.text,
-                                                        leaveStatusDateTime: DateTime.now(),
-                                                        aprovedId: "${loginController.UserLoginData.value.id}"
-                                                    )).then((value) async {
-                                                      List notificationAllTokenList = await ApiHelper.apiHelper.getAllNotificationsTokenData() ?? [];
-                                                      List oneNotificationTokenData = notificationAllTokenList.where((element) => element['user_id'] == poLeaveController.leaveOneData.value.userId!).toList();
-                                                      await ApiHelper.apiHelper.insertNotificationData(title: "Hello ${staffModelData.value.name}...", description: "Your leave rejected\n${leaveTypeData.value.leaveTypeName} leave from   ''${DateFormat('dd-MM-yyyy').format(DateTime.parse(poLeaveController.leaveOneData.value.startDate!))}''   to   ''${DateFormat('dd-MM-yyyy').format(DateTime.parse(poLeaveController.leaveOneData.value.endDate!))}''\nFor ''${poLeaveController.leaveOneData.value.days}'' Days\nReason   :   ${txtReason.text}...", ins_date_time: DateTime.now(), user_id: loginController.UserLoginData.value.id!, seen: "false");
-                                                      if(oneNotificationTokenData.isNotEmpty)
-                                                      {
-                                                        await ApiHelper.apiHelper.sendNotifications(title: "Hello ${staffModelData.value.name}...", body: "Your leave rejected\n${leaveTypeData.value.leaveTypeName} leave from   ''${DateFormat('dd-MM-yyyy').format(DateTime.parse(poLeaveController.leaveOneData.value.startDate!))}''   to   ''${DateFormat('dd-MM-yyyy').format(DateTime.parse(poLeaveController.leaveOneData.value.endDate!))}''\nFor ''${poLeaveController.leaveOneData.value.days}'' Days\nReason   :   ${txtReason.text}...", notification_token: oneNotificationTokenData.first['notification_token']);
-                                                      }
-                                                      await ApiHelper.apiHelper.getPoAllLeaveData().then((value) {
-                                                        poLeaveController.leaveDataList.value = value!.where((element) => element.leaveStatus!.toLowerCase() == poLeaveController.filterName.toLowerCase()).toList();
-                                                        EasyLoading.dismiss();
-                                                        Timer(const Duration(milliseconds: 500), () {
-                                                          EasyLoading.showSuccess("Leave Status Update Successfully");
-                                                          Get.back();
-                                                          Get.back();
-                                                        });
-                                                      });
+                                                EasyLoading.show(status: "${'please_wait'.tr}...");
+                                                await ApiHelper.apiHelper.updateOneLeaveAcceptRejectData(leaveDataModel: LeaveDataModel(
+                                                    leaveId: poLeaveController.leaveOneData.value.leaveId,
+                                                    leaveStatus: "Reject",
+                                                    leaveStatusReason: txtReason.text,
+                                                    leaveStatusDateTime: DateTime.now(),
+                                                    aprovedId: "${loginController.UserLoginData.value.id}"
+                                                )).then((value) async {
+                                                  List notificationAllTokenList = await ApiHelper.apiHelper.getAllNotificationsTokenData() ?? [];
+                                                  List oneNotificationTokenData = notificationAllTokenList.where((element) => element['user_id'] == poLeaveController.leaveOneData.value.userId!).toList();
+                                                  await ApiHelper.apiHelper.insertNotificationData(title: "Hello ${staffModelData.value.name}...", description: "Your leave rejected\n${leaveTypeData.value.leaveTypeName} leave from   ''${DateFormat('dd-MM-yyyy').format(DateTime.parse(poLeaveController.leaveOneData.value.startDate!))}''   to   ''${DateFormat('dd-MM-yyyy').format(DateTime.parse(poLeaveController.leaveOneData.value.endDate!))}''\nFor ''${poLeaveController.leaveOneData.value.days}'' Days\nReason   :   ${txtReason.text}...", ins_date_time: DateTime.now(), user_id: poLeaveController.leaveOneData.value.userId!, seen: "false");
+                                                  if(oneNotificationTokenData.isNotEmpty)
+                                                  {
+                                                    await ApiHelper.apiHelper.sendNotifications(title: "Hello ${staffModelData.value.name}...", body: "Your leave rejected\n${leaveTypeData.value.leaveTypeName} leave from   ''${DateFormat('dd-MM-yyyy').format(DateTime.parse(poLeaveController.leaveOneData.value.startDate!))}''   to   ''${DateFormat('dd-MM-yyyy').format(DateTime.parse(poLeaveController.leaveOneData.value.endDate!))}''\nFor ''${poLeaveController.leaveOneData.value.days}'' Days\nReason   :   ${txtReason.text}...", notification_token: oneNotificationTokenData.first['notification_token']);
+                                                  }
+                                                  await ApiHelper.apiHelper.getPoAllLeaveData().then((value) {
+                                                    poLeaveController.leaveDataList.value = value!.where((element) => element.leaveStatus!.toLowerCase() == poLeaveController.filterName.toLowerCase()).toList();
+                                                    EasyLoading.dismiss();
+                                                    Timer(const Duration(milliseconds: 500), () {
+                                                      EasyLoading.showSuccess("${'leave'.tr} ${'status'.tr} ${'update'.tr} ${'successfully'.tr}");
+                                                      Get.back();
+                                                      Get.back();
                                                     });
+                                                  });
+                                                });
                                               }
-                                          },
+                                            },
                                             // onPressed: () async {
                                             //   if(key.currentState!.validate())
                                             //   {
@@ -464,23 +464,23 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
                                             //   }
                                             // },
                                             style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                                            child: const Text("Yes",style: TextStyle(color: Colors.white),)),
+                                            child: Text("yes".tr,style: TextStyle(color: Colors.white),)),
                                         ElevatedButton(
                                           onPressed: () {
-                                            Get.back();
+                                            // Get.back();
                                             Get.back();
                                           },
-                                          child: Text("No",style: TextStyle(color: Colors.white),),style: ElevatedButton.styleFrom(backgroundColor: Colors.red),)
+                                          child: Text("no".tr,style: TextStyle(color: Colors.white),),style: ElevatedButton.styleFrom(backgroundColor: Colors.red),)
                                       ],
                                     );
                                   },);
                                 },style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                                child: const Text("Yes",style: TextStyle(color: Colors.white),)),
+                                child: Text("yes".tr,style: TextStyle(color: Colors.white),)),
                             ElevatedButton(
                               onPressed: () {
                                 Get.back();
                               },
-                              child: Text("No",style: TextStyle(color: Colors.white),),style: ElevatedButton.styleFrom(backgroundColor: Colors.red),)
+                              child: Text("no".tr,style: TextStyle(color: Colors.white),),style: ElevatedButton.styleFrom(backgroundColor: Colors.red),)
                           ],
                         );
                       },);
@@ -492,9 +492,9 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
                           borderRadius: BorderRadius.circular(9)
                       )
                   ),
-                  child: const Text(
-                    "Reject",
-                    style: TextStyle(
+                  child: Text(
+                    "reject".tr,
+                    style: const TextStyle(
                         color: Color(0xFF5b1aa0),
                         fontWeight: FontWeight.bold
                     ),

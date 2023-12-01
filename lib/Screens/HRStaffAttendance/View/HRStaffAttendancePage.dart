@@ -22,9 +22,9 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
       child: Scaffold(
         appBar: AppBar(
           iconTheme: const IconThemeData(color: Color(0xFF5b1aa0)),
-          title: const Text(
-            "Staff Attendance",
-            style: TextStyle(color: Color(0xFF5b1aa0), fontSize: 13),
+          title: Text(
+            "${'staff'.tr} ${'attendance'.tr}",
+            style: const TextStyle(color: Color(0xFF5b1aa0), fontSize: 13),
           ),
           centerTitle: true,
           actions: [
@@ -189,7 +189,7 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                           await showDatePicker(context: context, initialDate: DateTime.parse(hrController.selectedDate.value), firstDate: DateTime(2020), lastDate: DateTime.now()).then((value) async {
                             if(value != null)
                             {
-                              EasyLoading.show(status: "Please Wait...");
+                              EasyLoading.show(status: "${'please_wait'.tr}...");
                               hrController.siteDataList.value = (await ApiHelper.apiHelper.getAllSiteData()) ?? [];
                               hrController.selectedDate.value = value.toIso8601String();
                               hrController.allAttendanceData.value = (await ApiHelper.apiHelper.getAllStaffAttendance(dateTime: DateTime.parse(hrController.selectedDate.value))) ?? [];
@@ -202,8 +202,8 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                     ],
                   ),
                   SizedBox(height: Get.width/30,),
-                  const Text(
-                    "Overall Attendance",
+                  Text(
+                    "${'overall'.tr} ${'attendance'.tr}",
                     style: TextStyle(
                       color: Color(0xFF5b1aa0),
                       fontSize: 16,
@@ -256,7 +256,7 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                                         ),
                                       ),
                                       Text(
-                                        'Present',
+                                        'present'.tr,
                                         style: TextStyle(
                                           fontSize: 14,
                                           color: Colors.green.shade300,
@@ -274,7 +274,7 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                             Row(
                               children: [
                                 IconButton(onPressed: () async {
-                                  EasyLoading.show(status: "Please Wait...");
+                                  EasyLoading.show(status: "${'please_wait'.tr}...");
                                   hrController.siteDataList.value = (await ApiHelper.apiHelper.getAllSiteData()) ?? [];
                                   hrController.allAttendanceData.value = (await ApiHelper.apiHelper.getAllStaffAttendance(dateTime: DateTime.parse(hrController.selectedDate.value))) ?? [];
                                   EasyLoading.dismiss();
@@ -311,9 +311,9 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                                 SizedBox(
                                   width: Get.width / 45,
                                 ),
-                                const Text(
-                                  "Present",
-                                  style: TextStyle(
+                                Text(
+                                  "present".tr,
+                                  style: const TextStyle(
                                       color: Color(0xFF5b1aa0),
                                       fontSize: 12
                                   ),
@@ -335,9 +335,9 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                                 SizedBox(
                                   width: Get.width / 45,
                                 ),
-                                const Text(
-                                  "Absent",
-                                  style: TextStyle(
+                                Text(
+                                  "absent".tr,
+                                  style: const TextStyle(
                                       color: Color(0xFF5b1aa0),
                                       fontSize: 12
                                   ),
@@ -379,9 +379,9 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                                           fontSize: 20
                                       ),
                                     ),
-                                    const Text(
-                                      "Present",
-                                      style: TextStyle(
+                                    Text(
+                                      "present".tr,
+                                      style: const TextStyle(
                                           color: Color(0xFF5b1aa0),
                                           fontSize: 12,
                                           fontWeight: FontWeight.w300
@@ -408,9 +408,9 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                                           fontSize: 20
                                       ),
                                     ),
-                                    const Text(
-                                      "Total",
-                                      style: TextStyle(
+                                    Text(
+                                      "total".tr,
+                                      style: const TextStyle(
                                           color: Color(0xFF5b1aa0),
                                           fontSize: 12,
                                           fontWeight: FontWeight.w300
@@ -437,9 +437,9 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                                           fontSize: 20
                                       ),
                                     ),
-                                    const Text(
-                                      "Absent",
-                                      style: TextStyle(
+                                    Text(
+                                      "absent".tr,
+                                      style: const TextStyle(
                                           color: Color(0xFF5b1aa0),
                                           fontSize: 12,
                                           fontWeight: FontWeight.w300
@@ -455,8 +455,8 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                         hrController.allAttendanceData['absent'] == 0 ? Container() : Text.rich(
                             TextSpan(
                                 children: [
-                                  const TextSpan(
-                                    text: "No data found ",
+                                  TextSpan(
+                                    text: "no_data_found".tr,
                                     style: TextStyle(
                                         color: Color(0xFF5b1aa0),
                                         fontSize: 10,
@@ -471,8 +471,8 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                                         fontWeight: FontWeight.bold
                                     ),
                                   ),
-                                  const TextSpan(
-                                    text: " Staff out of",
+                                  TextSpan(
+                                    text: " ${'staff'.tr} ${'out'.tr.toLowerCase()} ${'of'.tr.toLowerCase()}",
                                     style: TextStyle(
                                         color: Color(0xFF5b1aa0),
                                         fontSize: 10,
@@ -494,9 +494,9 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                     ),
                   ),
                   SizedBox(height: Get.width/30,),
-                  const Text(
-                    "Sites",
-                    style: TextStyle(
+                  Text(
+                    "sites".tr,
+                    style: const TextStyle(
                       color: Color(0xFF5b1aa0),
                       fontSize: 16,
                     ),
@@ -519,7 +519,7 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                                 borderRadius: BorderRadius.circular(5),
                                 onTap: () async {
                                   // poAttendanceController.clusterOneData.value = poAttendanceController.poClusterAttendance[index];
-                                  EasyLoading.show(status: "Please Wait...");
+                                  EasyLoading.show(status: "${'please_wait'.tr}...");
                                   hrController.selectedSiteData.value = hrController.siteDataList[index];
                                   hrController.selectedSiteAllAttendanceData.value = siteWiseData;
                                   hrController.subSiteDataList.value = await ApiHelper.apiHelper.getAllSubSiteData(company_id: hrController.siteDataList[index].id!) ?? [];
@@ -589,8 +589,8 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                                                         fontSize: 15
                                                     ),
                                                   ),
-                                                  const Text(
-                                                    "Present",
+                                                  Text(
+                                                    "present".tr,
                                                     style: TextStyle(
                                                         color: Color(0xFF5b1aa0),
                                                         fontSize: 10,
@@ -618,9 +618,9 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                                                         fontSize: 17
                                                     ),
                                                   ),
-                                                  const Text(
-                                                    "Total",
-                                                    style: TextStyle(
+                                                  Text(
+                                                    "total".tr,
+                                                    style: const TextStyle(
                                                         color: Color(0xFF5b1aa0),
                                                         fontSize: 12,
                                                         fontWeight: FontWeight.w300
@@ -647,9 +647,9 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                                                         fontSize: 15
                                                     ),
                                                   ),
-                                                  const Text(
-                                                    "Absent",
-                                                    style: TextStyle(
+                                                  Text(
+                                                    "absent".tr,
+                                                    style: const TextStyle(
                                                         color: Color(0xFF5b1aa0),
                                                         fontSize: 10,
                                                         fontWeight: FontWeight.w300
@@ -670,9 +670,9 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                                             child: Text.rich(
                                                 TextSpan(
                                                     children: [
-                                                      const TextSpan(
-                                                        text: "No data found",
-                                                        style: TextStyle(
+                                                      TextSpan(
+                                                        text: "no_data_found".tr,
+                                                        style: const TextStyle(
                                                             color: Color(0xFF5b1aa0),
                                                             fontSize: 10,
                                                             fontWeight: FontWeight.w300
@@ -686,8 +686,8 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                                                             fontWeight: FontWeight.bold
                                                         ),
                                                       ),
-                                                      const TextSpan(
-                                                        text: " Staff out of",
+                                                      TextSpan(
+                                                        text: " ${'staff'.tr} ${'out'.tr.toLowerCase()} ${'of'.tr.toLowerCase()}",
                                                         style: TextStyle(
                                                             color: Color(0xFF5b1aa0),
                                                             fontSize: 10,
@@ -797,9 +797,9 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                                                       fontSize: 15
                                                   ),
                                                 ),
-                                                const Text(
-                                                  "Present",
-                                                  style: TextStyle(
+                                                Text(
+                                                  "present".tr,
+                                                  style: const TextStyle(
                                                       color: Color(0xFF5b1aa0),
                                                       fontSize: 10,
                                                       fontWeight: FontWeight.w300
@@ -826,9 +826,9 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                                                       fontSize: 17
                                                   ),
                                                 ),
-                                                const Text(
-                                                  "Total",
-                                                  style: TextStyle(
+                                                Text(
+                                                  "total".tr,
+                                                  style: const TextStyle(
                                                       color: Color(0xFF5b1aa0),
                                                       fontSize: 12,
                                                       fontWeight: FontWeight.w300
@@ -855,9 +855,9 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                                                       fontSize: 15
                                                   ),
                                                 ),
-                                                const Text(
-                                                  "Absent",
-                                                  style: TextStyle(
+                                                Text(
+                                                  "absent".tr,
+                                                  style: const TextStyle(
                                                       color: Color(0xFF5b1aa0),
                                                       fontSize: 10,
                                                       fontWeight: FontWeight.w300
@@ -878,9 +878,9 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                                           child: Text.rich(
                                               TextSpan(
                                                   children: [
-                                                    const TextSpan(
-                                                      text: "No data found",
-                                                      style: TextStyle(
+                                                    TextSpan(
+                                                      text: "no_data_found".tr,
+                                                      style: const TextStyle(
                                                           color: Color(0xFF5b1aa0),
                                                           fontSize: 10,
                                                           fontWeight: FontWeight.w300
@@ -894,9 +894,9 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                                                           fontWeight: FontWeight.bold
                                                       ),
                                                     ),
-                                                    const TextSpan(
-                                                      text: " Staff out of",
-                                                      style: TextStyle(
+                                                    TextSpan(
+                                                      text: " ${'staff'.tr} ${'out'.tr.toLowerCase()} ${'of'.tr.toLowerCase()}",
+                                                      style: const TextStyle(
                                                           color: Color(0xFF5b1aa0),
                                                           fontSize: 10,
                                                           fontWeight: FontWeight.w300

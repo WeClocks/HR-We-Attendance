@@ -33,7 +33,7 @@ class _PassWordVerifyPageState extends State<PassWordVerifyPage> {
             ],
           ),
           body: Obx(
-            () => Padding(
+                () => Padding(
               padding:  EdgeInsets.only(right: 10,left: 10,top: 10),
               child: Form(
                 key: key,
@@ -41,8 +41,8 @@ class _PassWordVerifyPageState extends State<PassWordVerifyPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Reset password",style: TextStyle(fontSize: 22,color:Color(0xFF5b1aa0),fontWeight: FontWeight.bold),),
-                      Text("Enter the old password with your account and verify \nold paswword to reset your password",style: TextStyle(color: Colors.grey.shade600),),
+                      Text("${'reset'.tr} ${'password'.tr.toLowerCase()}",style: TextStyle(fontSize: 22,color:Color(0xFF5b1aa0),fontWeight: FontWeight.bold),),
+                      Text("enter_the_old_password_desc".tr,style: TextStyle(color: Colors.grey.shade600),),
                       SizedBox(height: Get.width/20),
                       TextFormField(
                         controller: passwordController.oldPassword.value,
@@ -51,20 +51,20 @@ class _PassWordVerifyPageState extends State<PassWordVerifyPage> {
                                 borderRadius: BorderRadius.circular(10)
                             ),
                             contentPadding: EdgeInsets.only(left: 20,right: 20),
-                            labelText: "Old Password"
+                            labelText: "${'old'.tr} ${'password'.tr}"
                         ),
                         validator: (value) {
                           if(value!.isEmpty)
                           {
-                            return "Please Enter the password";
+                            return "${'please'.tr} ${'enter_the'.tr} ${'password'.tr.toLowerCase()}";
                           }
                           else if(value.length != 10)
                           {
-                            return "Please enter max 10 character";
+                            return "${'please'.tr} ${'enter'.tr.toLowerCase()} ${'max'.tr.toLowerCase()} 10 ${'character'.tr.toLowerCase()}";
                           }
                           else if(!BCrypt.checkpw(value, loginController.UserLoginData.value.password!))
                           {
-                            return "Please enter right password";
+                            return "${'please'.tr} ${'enter'.tr.toLowerCase()} ${'right'.tr.toLowerCase()} ${'password'.tr.toLowerCase()}";
                           }
                         },
                       ),
@@ -93,17 +93,17 @@ class _PassWordVerifyPageState extends State<PassWordVerifyPage> {
                               ),
                             ),
                             contentPadding: EdgeInsets.only(left: 20,right: 20),
-                            labelText: "New Password"
+                            labelText: "${'new'.tr} ${'password'.tr}"
                         ),
                         obscureText: loginController.hidePass.value,
                         validator: (value) {
                           if(value!.isEmpty)
                           {
-                            return "Please Enter the password";
+                            return "${'please'.tr} ${'enter_the'.tr} ${'password'.tr.toLowerCase()}";
                           }
                           else if(value.length != 10)
                           {
-                            return "Please enter max 10 character";
+                            return "${'please'.tr} ${'enter'.tr.toLowerCase()} ${'max'.tr.toLowerCase()} 10 ${'character'.tr.toLowerCase()}";
                           }
                         },
                       ),
@@ -115,20 +115,20 @@ class _PassWordVerifyPageState extends State<PassWordVerifyPage> {
                               borderRadius: BorderRadius.circular(10)
                           ),
                           contentPadding: EdgeInsets.only(left: 20,right: 20),
-                          labelText: "Confirm new password",
+                          labelText: "${'confirm'.tr} ${'new'.tr.toLowerCase()} ${'password'.tr}",
                         ),
                         validator: (value) {
                           if(value!.isEmpty)
                           {
-                            return "Please Enter the password";
+                            return "${'please'.tr} ${'enter_the'.tr} ${'password'.tr.toLowerCase()}";
                           }
                           else if(value.length != 10)
                           {
-                            return "Please enter max 10 character";
+                            return "${'please'.tr} ${'enter'.tr.toLowerCase()} ${'max'.tr.toLowerCase()} 10 ${'character'.tr.toLowerCase()}";
                           }
                           else if(value != passwordController.newPassword.value.text)
                           {
-                            return "Please enter same as new password";
+                            return "${'please'.tr} ${'enter'.tr.toLowerCase()} ${'password'.tr.toLowerCase()} ${'same_as'.tr} ${'new'.tr.toLowerCase()} ${'password'.tr.toLowerCase()}";
                           }
                         },
 
@@ -140,13 +140,13 @@ class _PassWordVerifyPageState extends State<PassWordVerifyPage> {
                           {
                             showDialog(context: context, builder: (context) {
                               return AlertDialog(
-                                title: Text("Reset password?"),
-                                content: Text("Are you sure want to reset password?"),
+                                title: Text("${'reset'.tr} ${'password'.tr}?"),
+                                content: Text("${'are_you_sure_want_to'.tr} ${'reset'.tr.toLowerCase()} ${'password'.tr.toLowerCase()}?"),
                                 actions: [
                                   ElevatedButton(
                                       onPressed: () async {
                                         Get.back();
-                                        EasyLoading.show(status: "Please Wait...");
+                                        EasyLoading.show(status: "${'please_wait'.tr}...");
                                         String password = BCrypt.hashpw(passwordController.newPassword.value.text, BCrypt.gensalt());
                                         UserLoginModel user = loginController.UserLoginData.value;
                                         print("=============== beforeeeeeeeeeeev ${loginController.UserLoginData.value.password}\n${user.password}");
@@ -159,16 +159,16 @@ class _PassWordVerifyPageState extends State<PassWordVerifyPage> {
                                           loginController.UserLoginData.value = await SharedPref.sharedpref.readUserLoginData() ?? UserLoginModel();
                                           print("=============== aftereeeeeeeeeeee 22222222 ${loginController.UserLoginData.value.password}\n${user.password}\n$password");
                                           EasyLoading.dismiss();
-                                          EasyLoading.showSuccess("Your Password Change Successfully");
+                                          EasyLoading.showSuccess("your_password_changed".tr);
                                           Get.back();
                                         });
                                       },
-                                      child: Text("Yes",style: TextStyle(color: Colors.white),),style: ElevatedButton.styleFrom(backgroundColor: Colors.green)),
+                                      child: Text("yes".tr,style: TextStyle(color: Colors.white),),style: ElevatedButton.styleFrom(backgroundColor: Colors.green)),
                                   ElevatedButton(
                                     onPressed: () {
                                       Get.back();
                                     },
-                                    child: Text("No",style: TextStyle(color: Colors.white),),style: ElevatedButton.styleFrom(backgroundColor: Colors.red),)
+                                    child: Text("no".tr,style: TextStyle(color: Colors.white),),style: ElevatedButton.styleFrom(backgroundColor: Colors.red),)
                                 ],
                               );
                             },);
@@ -183,7 +183,7 @@ class _PassWordVerifyPageState extends State<PassWordVerifyPage> {
                             color: Color(0xFF5b1aa0),
                           ),
                           alignment: Alignment.center,
-                          child: Text("Change Password",style: TextStyle(color: Color(0xfff0e5ff)),),
+                          child: Text("change_password".tr,style: TextStyle(color: Color(0xfff0e5ff)),),
                         ),
                       ),
                     ],

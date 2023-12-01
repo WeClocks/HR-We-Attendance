@@ -115,11 +115,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   padding:  EdgeInsets.only(top: 50),
                   child: Align(
                       alignment: Alignment.topCenter,
-                      child: Text("Profile",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),)),
+                      child: Text("profile".tr,style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold),)),
                 ),
                 IconButton(onPressed: () async {
                   Get.back();
-                }, icon: Icon(Icons.arrow_back,color: Colors.white,))
+                }, icon: const Icon(Icons.arrow_back,color: Colors.white,))
               ],
             ),
           ),

@@ -57,7 +57,13 @@ class HomeController extends GetxController {
   Rx<LeaveTypeDataModel> leaveTypeFilterOneData = LeaveTypeDataModel().obs;
   RxList<LeaveDataModel> leaveDataList = <LeaveDataModel>[].obs;
   RxList<LeaveDataModel> leaveDataFilterList = <LeaveDataModel>[].obs;
-
+  RxList languageList = [
+    {'name': 'English','lang': 'en', 'con': 'US'},
+    {'name': 'Marathi','lang': 'mr', 'con': 'IN'},
+    {'name': 'Hindi','lang': 'hi', 'con': 'IN'},
+    {'name': 'Gujarati','lang': 'guj', 'con': 'IN'},
+  ].obs;
+  RxMap selectedLanguage = {}.obs;
 
 
 
@@ -281,7 +287,7 @@ class HomeController extends GetxController {
   Future<void> readWeAttendanceOneOnlineData() async {
     try {
       LoginController loginController = Get.put(LoginController());
-      loginController.getUserData();
+      // loginController.getUserData();
       var connectivityResult = await Connectivity().checkConnectivity();
       DateTime dateTime = connectivityResult == ConnectivityResult.none ? DateTime.now() : await NTP.now();
       print("=======7333333333333 ${loginController.UserLoginData.value.id}");

@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:hr_we_attendance/Screens/HomeScreen/Model/SubSiteDataModel.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -28,9 +29,9 @@ class _HRTrackPageState extends State<HRTrackPage> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           iconTheme: const IconThemeData(color: Color(0xFF5b1aa0)),
-          title: const Text(
-            "Staff Tracking",
-            style: TextStyle(color: Color(0xFF5b1aa0), fontSize: 16),
+          title: Text(
+            "${'staff'.tr} ${'tracking'.tr}",
+            style: const TextStyle(color: Color(0xFF5b1aa0), fontSize: 16),
           ),
           centerTitle: false,
           actions: [
@@ -51,25 +52,25 @@ class _HRTrackPageState extends State<HRTrackPage> {
                                 .map((element) => ElevatedButton(
                                 onPressed: () async {
                                   EasyLoading.show(
-                                      status: "Please Wait...");
+                                      status: "${'please_wait'.tr}...");
                                   Get.back();
                                   if(element.name == "All")
-                                    {
-                                      await ApiHelper.apiHelper.getHRAttendanceData(date: DateTime.parse(hrTrackController.selectedDate.value)).then((value) {
-                                        hrTrackController.hrAttendanceDataList.value = value == null ? [] : List.from(value.reversed);
-                                        // Get.to(const HRTrackPage(),transition: Transition.fadeIn);
-                                        EasyLoading.dismiss();
-                                      });
-                                    }
+                                  {
+                                    await ApiHelper.apiHelper.getHRAttendanceData(date: DateTime.parse(hrTrackController.selectedDate.value)).then((value) {
+                                      hrTrackController.hrAttendanceDataList.value = value == null ? [] : List.from(value.reversed);
+                                      // Get.to(const HRTrackPage(),transition: Transition.fadeIn);
+                                      EasyLoading.dismiss();
+                                    });
+                                  }
                                   else
-                                    {
-                                      await ApiHelper.apiHelper.getHRAttendanceData(date: DateTime.parse(hrTrackController.selectedDate.value)).then((value) {
-                                        List hrAttendanceList = value == null ? [] : List.from(value.reversed);
-                                        hrTrackController.hrAttendanceDataList.value = hrAttendanceList.where((e) => e['company_id'] == element.id).toList();
-                                        // Get.to(const HRTrackPage(),transition: Transition.fadeIn);
-                                        EasyLoading.dismiss();
-                                      });
-                                    }
+                                  {
+                                    await ApiHelper.apiHelper.getHRAttendanceData(date: DateTime.parse(hrTrackController.selectedDate.value)).then((value) {
+                                      List hrAttendanceList = value == null ? [] : List.from(value.reversed);
+                                      hrTrackController.hrAttendanceDataList.value = hrAttendanceList.where((e) => e['company_id'] == element.id).toList();
+                                      // Get.to(const HRTrackPage(),transition: Transition.fadeIn);
+                                      EasyLoading.dismiss();
+                                    });
+                                  }
                                   // EasyLoading.dismiss();
                                 },
                                 style: ElevatedButton.styleFrom(backgroundColor: Colors.white,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9))),
@@ -91,7 +92,7 @@ class _HRTrackPageState extends State<HRTrackPage> {
           ],
         ),
         body: Obx(
-          () => Padding(
+              () => Padding(
             padding: EdgeInsets.all(Get.width/30),
             child: Column(
               children: [
@@ -100,7 +101,7 @@ class _HRTrackPageState extends State<HRTrackPage> {
                     showDatePicker(context: context, initialDate: DateTime.parse(hrTrackController.selectedDate.value), firstDate: DateTime(DateTime.now().year), lastDate: DateTime.now()).then((value) async {
                       if(value != null)
                       {
-                        EasyLoading.show(status: "Please Wait...");
+                        EasyLoading.show(status: "${'please_wait'.tr}...");
                         hrTrackController.selectedDate.value = value.toIso8601String();
                         await ApiHelper.apiHelper.getHRAttendanceData(date: DateTime.parse(hrTrackController.selectedDate.value)).then((value) {
                           hrTrackController.hrAttendanceDataList.value = value == null ? [] : List.from(value.reversed);
@@ -139,8 +140,11 @@ class _HRTrackPageState extends State<HRTrackPage> {
                         return Padding(
                           padding: EdgeInsets.only(top: index == 0 ? 0 : Get.width/30),
                           child: InkWell(
-                            onTap: () {
+                            onTap: () async {
                               hrTrackController.hrAttendanceOneData.value = hrTrackController.hrAttendanceDataList[index];
+                              List<SubSiteDataModel> subSiteList = await ApiHelper.apiHelper.getAllSubSiteData(company_id: hrTrackController.hrAttendanceOneData['company_id']) ?? [];
+                              print("=====~~~~~~~~subbbbbbbbbbbbbbb $subSiteList ${hrTrackController.hrAttendanceOneData.value}");
+                              hrTrackController.userSubSiteData.value = subSiteList.where((element) => element.id == hrTrackController.hrAttendanceOneData['sub_company_id']).toList().isEmpty ? SubSiteDataModel() : subSiteList.where((element) => element.id == hrTrackController.hrAttendanceOneData['sub_company_id']).toList().first;
                               Get.to(const MapsPage(),transition: Transition.rightToLeft);
                             },
                             child: Container(
@@ -197,7 +201,7 @@ class _HRTrackPageState extends State<HRTrackPage> {
                                                         Uri uri = Uri(path: '${hrTrackController.hrAttendanceDataList[index]['mobile']}',scheme: 'tel');
                                                         if(await canLaunchUrl(uri))
                                                         {
-                                                        await launchUrl(uri);
+                                                          await launchUrl(uri);
                                                         }
                                                       },
                                                       child: Row(
@@ -212,7 +216,7 @@ class _HRTrackPageState extends State<HRTrackPage> {
                                                 ),
                                                 Text(
                                                   // homeController.weAttendanceOneData.value.punchIn == false ? "-" : DateFormat('hh:mm a').format(homeController.weAttendanceOneData.value.inDateTime!),
-                                                  "Punch In : ${DateFormat('hh:mm a').format(DateTime.parse(hrTrackController.hrAttendanceDataList[index]['clock_in']))} | Punch Out : ${hrTrackController.hrAttendanceDataList[index]['clock_out'] == null ? "-" : DateFormat('hh:mm a').format(DateTime.parse(hrTrackController.hrAttendanceDataList[index]['clock_out']))}",
+                                                  "${'punch'.tr} ${'in'.tr} : ${DateFormat('hh:mm a').format(DateTime.parse(hrTrackController.hrAttendanceDataList[index]['clock_in']))} | ${'punch'.tr} ${'out'.tr} : ${hrTrackController.hrAttendanceDataList[index]['clock_out'] == null ? "-" : DateFormat('hh:mm a').format(DateTime.parse(hrTrackController.hrAttendanceDataList[index]['clock_out']))}",
                                                   style: const TextStyle(
                                                     fontSize: 13, color: Color(0xFF5b1aa0),),
                                                 ),
@@ -232,8 +236,11 @@ class _HRTrackPageState extends State<HRTrackPage> {
                                             ),
                                           ),
                                           InkWell(
-                                            onTap: () {
+                                            onTap: () async {
                                               hrTrackController.hrAttendanceOneData.value = hrTrackController.hrAttendanceDataList[index];
+                                              List<SubSiteDataModel> subSiteList = await ApiHelper.apiHelper.getAllSubSiteData(company_id: hrTrackController.hrAttendanceOneData['company_id']) ?? [];
+                                              print("=====~~~~~~~~subbbbbbbbbbbbbbb $subSiteList ${hrTrackController.hrAttendanceOneData.value}");
+                                              hrTrackController.userSubSiteData.value = subSiteList.where((element) => element.id == hrTrackController.hrAttendanceOneData['sub_company_id']).toList().isEmpty ? SubSiteDataModel() : subSiteList.where((element) => element.id == hrTrackController.hrAttendanceOneData['sub_company_id']).toList().first;
                                               Get.to(const MapsPage(),transition: Transition.rightToLeft);
                                             },
                                             child: Row(
@@ -264,3 +271,4 @@ class _HRTrackPageState extends State<HRTrackPage> {
     );
   }
 }
+

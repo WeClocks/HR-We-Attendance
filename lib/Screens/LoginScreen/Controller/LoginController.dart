@@ -40,24 +40,24 @@ class LoginController extends GetxController
     print("================c$login");
     getAllData();
     if(locationPermission != null && locationPermission)
-      {
-        if (login != null && login) {
-          homeController.readUserSiteAndSubSiteData();
-          Timer(Duration(seconds: 3), () {
-            Get.offNamed('/');
-          });
-        } else {
-          Timer(Duration(seconds: 3), () {
-            Get.offNamed('login');
-          });
-        }
-      }
-    else
-      {
-        Timer(const Duration(seconds: 3), () {
-          Get.to(const LocationPermissionPage());
+    {
+      if (login != null && login) {
+        homeController.readUserSiteAndSubSiteData();
+        Timer(Duration(seconds: 3), () {
+          Get.offNamed('/');
+        });
+      } else {
+        Timer(Duration(seconds: 3), () {
+          Get.offNamed('login');
         });
       }
+    }
+    else
+    {
+      Timer(const Duration(seconds: 3), () {
+        Get.to(const LocationPermissionPage());
+      });
+    }
   }
 
   HomeController homeController = Get.put(HomeController());
@@ -87,9 +87,9 @@ class LoginController extends GetxController
       bool? punchIn = await SharedPref.sharedpref.readSync(key: 'punchIn');
       print("============== 8777777777777 PINNNNNNNNNNNNNN $punchIn");
       if(punchIn != null && punchIn)
-        {
-          await initializeService();
-        }
+      {
+        await initializeService();
+      }
     });
     // EasyGeofencing.startGeofenceService(
     //     pointedLatitude: '21.1664583',
@@ -135,43 +135,43 @@ class LoginController extends GetxController
     designationData.value = await SharedPref.sharedpref.readUserDesignationData() ?? DesignationsModel();
     var connectivityResult = await Connectivity().checkConnectivity();
     print("=====================userrrrrrrrrrrrrr ${UserLoginData.value.name != null && UserLoginData.value.id != null}");
-   if(UserLoginData.value.name != null && UserLoginData.value.id != null && connectivityResult != ConnectivityResult.none)
-     {
-       List<SiteDataModel>? siteDataList = await ApiHelper.apiHelper.getAllSiteData();
-       homeController.siteDropDownList.value = siteDataList ?? [];
-       List<SiteDataModel> userLoginSiteData = homeController.siteDropDownList.where((p0) {
-         print("======================= checkkkkkkkkkkkk ${p0.id} == ${staffLoginData.value.companyId!} ::: ${p0.id == staffLoginData.value.companyId!}");
-         return p0.id == staffLoginData.value.companyId!;
-       }).toList();
-       print("=================siteeeeeeeeeeeeeeeeeeee ${homeController.siteDropDownList} ${userLoginSiteData.isNotEmpty}");
-       if(userLoginSiteData.isNotEmpty)
-       {
-         homeController.siteOneDropDownItem.value = userLoginSiteData.first;
-         homeController.subSiteDropDownList.value = await ApiHelper.apiHelper.getAllSubSiteData(company_id: homeController.siteOneDropDownItem.value.id!) ?? [];
-       }
+    if(UserLoginData.value.name != null && UserLoginData.value.id != null && connectivityResult != ConnectivityResult.none)
+    {
+      List<SiteDataModel>? siteDataList = await ApiHelper.apiHelper.getAllSiteData();
+      homeController.siteDropDownList.value = siteDataList ?? [];
+      List<SiteDataModel> userLoginSiteData = homeController.siteDropDownList.where((p0) {
+        print("======================= checkkkkkkkkkkkk ${p0.id} == ${staffLoginData.value.companyId!} ::: ${p0.id == staffLoginData.value.companyId!}");
+        return p0.id == staffLoginData.value.companyId!;
+      }).toList();
+      print("=================siteeeeeeeeeeeeeeeeeeee ${homeController.siteDropDownList} ${userLoginSiteData.isNotEmpty}");
+      if(userLoginSiteData.isNotEmpty)
+      {
+        homeController.siteOneDropDownItem.value = userLoginSiteData.first;
+        homeController.subSiteDropDownList.value = await ApiHelper.apiHelper.getAllSubSiteData(company_id: homeController.siteOneDropDownItem.value.id!) ?? [];
+      }
 
-       if(staffLoginData.value.id == null || staffLoginData.value.designationId == null)
-         {
-           StaffDataModel staffOneData = await ApiHelper.apiHelper.getStaffData(staff_id: loginController.UserLoginData.value.id!) ?? StaffDataModel();
-           SharedPref.sharedpref.setUserStaffData(userStaffData: staffOneData);
-           staffLoginData.value = staffOneData;
-           if(designationData.value.id == null)
-             {
-               DesignationsModel? designationOneData = await ApiHelper.apiHelper.getDesignationsIdWise(designation_id: staffOneData.designationId!);
-               SharedPref.sharedpref.setUserDesignationData(userDesignationdata: designationOneData!);
-               designationData.value = designationOneData;
-             }
-         }
-       else
-         {
-           if(designationData.value.id == null)
-           {
-             DesignationsModel? designationOneData = await ApiHelper.apiHelper.getDesignationsIdWise(designation_id: staffLoginData.value.designationId!);
-             SharedPref.sharedpref.setUserDesignationData(userDesignationdata: designationOneData!);
-             designationData.value = designationOneData;
-           }
-         }
-     }
+      if(staffLoginData.value.id == null || staffLoginData.value.designationId == null)
+      {
+        StaffDataModel staffOneData = await ApiHelper.apiHelper.getStaffData(staff_id: loginController.UserLoginData.value.id!) ?? StaffDataModel();
+        SharedPref.sharedpref.setUserStaffData(userStaffData: staffOneData);
+        staffLoginData.value = staffOneData;
+        if(designationData.value.id == null)
+        {
+          DesignationsModel? designationOneData = await ApiHelper.apiHelper.getDesignationsIdWise(designation_id: staffOneData.designationId!);
+          SharedPref.sharedpref.setUserDesignationData(userDesignationdata: designationOneData!);
+          designationData.value = designationOneData;
+        }
+      }
+      else
+      {
+        if(designationData.value.id == null)
+        {
+          DesignationsModel? designationOneData = await ApiHelper.apiHelper.getDesignationsIdWise(designation_id: staffLoginData.value.designationId!);
+          SharedPref.sharedpref.setUserDesignationData(userDesignationdata: designationOneData!);
+          designationData.value = designationOneData;
+        }
+      }
+    }
   }
 
   Future<void> pickImage(context) async {
@@ -221,7 +221,7 @@ class LoginController extends GetxController
 
   Future<void> pickProblemImage(context) async {
     final ImagePicker _pickimage = ImagePicker();
-    EasyLoading.show(status: "Please Wait...");
+    EasyLoading.show(status: "${'please_wait'.tr}...");
     final image = await _pickimage.pickImage(source: ImageSource.camera,imageQuality: 50).then((value) async {
       print("mmmmmmmmmmmmmmmmmm");
       if (value != null) {

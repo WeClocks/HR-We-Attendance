@@ -28,34 +28,34 @@ class _ReportPageState extends State<ReportPage> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: Color(0xFF5b1aa0)),
-          title: const Text(
-            "Attendance Report",
-            style: TextStyle(color: Color(0xFF5b1aa0), fontSize: 16),
+          title: Text(
+            "${'attendance'.tr} ${'report'.tr}",
+            style: const TextStyle(color: Color(0xFF5b1aa0), fontSize: 16),
           ),
           centerTitle: false,
         ),
         body: Padding(
           padding: EdgeInsets.all(Get.width/30),
           child: Obx(
-            () => Column(
+                () => Column(
               children: [
                 InkWell(
                   onTap: () {
                     showDatePicker(context: context, initialDate: DateTime.parse(reportController.selectedMonth.value), firstDate: DateTime(DateTime.now().year), lastDate: DateTime(2099)).then((value) async {
                       if(value != null)
-                        {
-                          EasyLoading.show(status: "Please Wait...");
-                          reportController.selectedMonth.value = value.toIso8601String();
-                          reportController.totalPresent.value = 0;
-                          reportController.totalAbsent.value = 0;
-                          reportController.reportsList.value = [];
-                          reportController.totalPresent.value = await ApiHelper.apiHelper.getPresent(staff_id: loginController.UserLoginData.value.id!, dateTime: value);
-                          List<PunchInOutDataModel> reportsList = await ApiHelper.apiHelper.getReport(staff_id: loginController.UserLoginData.value.id!, dateTime: value) ?? [];
-                          reportController.reportsList.value = List.from(reportsList.reversed);
-                          reportController.totalAbsent.value = ConstHelper.constHelper.getDaysInMonth(value.year, value.month) - reportController.totalPresent.value;
-                          // Get.to(const ReportPage(),transition: Transition.rightToLeft);
-                          EasyLoading.dismiss();
-                        }
+                      {
+                        EasyLoading.show(status: "${'please_wait'.tr}...");
+                        reportController.selectedMonth.value = value.toIso8601String();
+                        reportController.totalPresent.value = 0;
+                        reportController.totalAbsent.value = 0;
+                        reportController.reportsList.value = [];
+                        reportController.totalPresent.value = await ApiHelper.apiHelper.getPresent(staff_id: loginController.UserLoginData.value.id!, dateTime: value);
+                        List<PunchInOutDataModel> reportsList = await ApiHelper.apiHelper.getReport(staff_id: loginController.UserLoginData.value.id!, dateTime: value) ?? [];
+                        reportController.reportsList.value = List.from(reportsList.reversed);
+                        reportController.totalAbsent.value = ConstHelper.constHelper.getDaysInMonth(value.year, value.month) - reportController.totalPresent.value;
+                        // Get.to(const ReportPage(),transition: Transition.rightToLeft);
+                        EasyLoading.dismiss();
+                      }
                     });
                   },
                   child: Container(
@@ -101,9 +101,9 @@ class _ReportPageState extends State<ReportPage> {
                               style: const TextStyle(
                                 fontSize: 16, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
                             ),
-                            const Text(
-                              "Present",
-                              style: TextStyle(
+                            Text(
+                              "present".tr,
+                              style: const TextStyle(
                                 fontSize: 13, color: Colors.grey,),
                             ),
                           ],
@@ -119,9 +119,9 @@ class _ReportPageState extends State<ReportPage> {
                               style: const TextStyle(
                                 fontSize: 18, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
                             ),
-                            const Text(
-                              "Total",
-                              style: TextStyle(
+                            Text(
+                              "total".tr,
+                              style: const TextStyle(
                                 fontSize: 15, color: Colors.grey,),
                             ),
                           ],
@@ -137,9 +137,9 @@ class _ReportPageState extends State<ReportPage> {
                               style: const TextStyle(
                                 fontSize: 16, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
                             ),
-                            const Text(
-                              "Absent",
-                              style: TextStyle(
+                            Text(
+                              "absent".tr,
+                              style: const TextStyle(
                                 fontSize: 13, color: Colors.grey,),
                             ),
                           ],
@@ -152,11 +152,11 @@ class _ReportPageState extends State<ReportPage> {
                 Container(
                   width: Get.width,
                   decoration: const BoxDecoration(
-                      color: Color(0xfff0e5ff),
-                      borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(300),
-                          topLeft: Radius.circular(300)
-                      ),
+                    color: Color(0xfff0e5ff),
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(300),
+                        topLeft: Radius.circular(300)
+                    ),
                   ),
                   padding: EdgeInsets.symmetric(vertical: Get.width/30,horizontal: Get.width/20),
                   alignment: Alignment.center,
@@ -170,8 +170,8 @@ class _ReportPageState extends State<ReportPage> {
                           curve: Curves.easeOut, // Adjust curve as needed
                         );
                       },child: Icon(Icons.arrow_back_ios_new_outlined,size: Get.width/20,)),
-                      const Text(
-                        "Monthly Report",
+                      Text(
+                        "${'monthly'.tr} ${'report'.tr}",
                         style: TextStyle(
                           fontSize: 16, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
                       ),
@@ -190,140 +190,140 @@ class _ReportPageState extends State<ReportPage> {
                 ),
                 Expanded(
                   child: Container(
-                    width: Get.width,
-                    // height: 100,
-                    decoration: const BoxDecoration(
-                      color: Color(0xfff0e5ff),
-                      // border: Border.all(color: Color(0xFF5b1aa0),)
-                    ),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        controller: _scrollController,
-                        child: DataTable(
-                          border: TableBorder.all(color: const Color(0xFF5b1aa0)),
-                          rows: [
-                            for(int i=0; i<reportController.reportsList.length; i++)
-                              DataRow(
-                                  cells: [
-                                    DataCell(
-                                      Center(
-                                        child: Text(
-                                          "${i+1}",
-                                          style: const TextStyle(
-                                            fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
-                                        ),
-                                      ),
-                                    ),
-                                    DataCell(
-                                      Center(
-                                        child: Text(
-                                          "${reportController.reportsList[i].type}",
-                                          style: const TextStyle(
-                                            fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
-                                        ),
-                                      ),
-                                    ),
-                                    DataCell(
-                                      Center(
-                                        child: Text(
-                                          DateFormat('dd-MM-yyyy hh:mm:ss a').format(reportController.reportsList[i].clockIn!),
-                                          style: const TextStyle(
-                                            fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
-                                        ),
-                                      ),
-                                    ),
-                                    DataCell(
-                                      Center(
-                                        child: Text(
-                                            reportController.reportsList[i].clockOut == null ? "-" : DateFormat('dd-MM-yyyy hh:mm:ss a').format(reportController.reportsList[i].clockOut!),
-                                          style: const TextStyle(
-                                            fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
-                                        ),
-                                      ),
-                                    ),
-                                    DataCell(
-                                      Center(
-                                        child: Text(
-                                            reportController.reportsList[i].clockOut == null ? "-" : "${reportController.reportsList[i].clockOutType}",
-                                          style: const TextStyle(
-                                            fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
-                                        ),
-                                      ),
-                                    ),
-                                    DataCell(
-                                      Center(
-                                        child: Text(
-                                          "${reportController.reportsList[i].hours!.split('.').first}:${reportController.reportsList[i].hours!.split('.').last} hrs",
-                                          style: const TextStyle(
-                                            fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
-                                        ),
-                                      ),
-                                    ),
-                                  ]
-                              )
-                          ],
-                          columns: const [
-                            DataColumn(
-                              label: Center(
-                                child: Text(
-                                  "No",
-                                  style: TextStyle(
-                                    fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Center(
-                                child: Text(
-                                  "Type",
-                                  style: TextStyle(
-                                    fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Center(
-                                child: Text(
-                                  "Punch In",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Center(
-                                child: Text(
-                                  "Punch Out",
-                                  style: TextStyle(
-                                    fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Center(
-                                child: Text(
-                                  "Punch Out Type",
-                                  style: TextStyle(
-                                    fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Center(
-                                child: Text(
-                                  "Working Hours",
-                                  style: TextStyle(
-                                    fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                      width: Get.width,
+                      // height: 100,
+                      decoration: const BoxDecoration(
+                        color: Color(0xfff0e5ff),
+                        // border: Border.all(color: Color(0xFF5b1aa0),)
                       ),
-                    )
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          controller: _scrollController,
+                          child: DataTable(
+                            border: TableBorder.all(color: const Color(0xFF5b1aa0)),
+                            rows: [
+                              for(int i=0; i<reportController.reportsList.length; i++)
+                                DataRow(
+                                    cells: [
+                                      DataCell(
+                                        Center(
+                                          child: Text(
+                                            "${i+1}",
+                                            style: const TextStyle(
+                                              fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Center(
+                                          child: Text(
+                                            "${reportController.reportsList[i].type}",
+                                            style: const TextStyle(
+                                              fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Center(
+                                          child: Text(
+                                            DateFormat('dd-MM-yyyy hh:mm:ss a').format(reportController.reportsList[i].clockIn!),
+                                            style: const TextStyle(
+                                              fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Center(
+                                          child: Text(
+                                            reportController.reportsList[i].clockOut == null ? "-" : DateFormat('dd-MM-yyyy hh:mm:ss a').format(reportController.reportsList[i].clockOut!),
+                                            style: const TextStyle(
+                                              fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Center(
+                                          child: Text(
+                                            reportController.reportsList[i].clockOut == null ? "-" : "${reportController.reportsList[i].clockOutType}",
+                                            style: const TextStyle(
+                                              fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Center(
+                                          child: Text(
+                                            "${reportController.reportsList[i].hours!.split('.').first}:${reportController.reportsList[i].hours!.split('.').last} hrs",
+                                            style: const TextStyle(
+                                              fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
+                                          ),
+                                        ),
+                                      ),
+                                    ]
+                                )
+                            ],
+                            columns: [
+                              DataColumn(
+                                label: Center(
+                                  child: Text(
+                                    "numb".tr,
+                                    style: const TextStyle(
+                                      fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Center(
+                                  child: Text(
+                                    "type".tr,
+                                    style: const TextStyle(
+                                      fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Center(
+                                  child: Text(
+                                    "${'punch'.tr} ${'in'.tr}",
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Center(
+                                  child: Text(
+                                    "${'punch'.tr} ${'out'.tr}",
+                                    style: const TextStyle(
+                                      fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Center(
+                                  child: Text(
+                                    "${'punch'.tr} ${'out'.tr} ${'type'.tr}",
+                                    style: const TextStyle(
+                                      fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Center(
+                                  child: Text(
+                                    "working_hours".tr,
+                                    style: const TextStyle(
+                                      fontSize: 13, color: Color(0xFF5b1aa0),fontWeight: FontWeight.bold,),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
                   ),
                 ),
               ],
