@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   Container(
                     height: Get.height/2.8,
-                    color: Color(0xff29B5F4),
+                    color: const Color(0xff29B5F4),
                     padding: EdgeInsets.only(bottom: Get.width/10),
                     alignment: Alignment.center,
                     child: Stack(
