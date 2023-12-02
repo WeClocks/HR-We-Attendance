@@ -78,19 +78,29 @@ class _LoginPageState extends State<LoginPage> {
                         Align(
                           alignment: Alignment.topRight,
                           child: Container(
-                            // margin: EdgeInsets.only(top: Get.width/75,right: Get.width/75),
-                            padding: EdgeInsets.symmetric(horizontal: Get.width/30,vertical: 0),
+                            margin: EdgeInsets.only(top: Get.width/30,right: Get.width/30),
+                            decoration: BoxDecoration(
+                              // border: Border.all(color: Colors.white),
+                                borderRadius: BorderRadius.circular(6),
+                                color: Colors.white
+                            ),
+                            padding: EdgeInsets.only(left: Get.width/30,right: (Get.width/30)),
                             child: IntrinsicWidth(
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton(
-                                  style: TextStyle(fontSize: 12,color: Colors.black),
+                                  style: const TextStyle(fontSize: 12,color: Color(0xff29B5F4)),
+                                  isExpanded: true,
+                                  isDense: true,
+                                  dropdownColor: Colors.white,
+                                  iconEnabledColor: Colors.white,
+                                  icon: const Visibility(visible:false, child: Icon(Icons.arrow_downward)),
                                   items: homeController.languageList.map((element) {
                                     return DropdownMenuItem(value: '${element['name']}',onTap: () {
                                       Locale local = Locale(element['lang'],element['con']);
                                       Get.updateLocale(local);
                                       homeController.selectedLanguage.value = element;
                                       SharedPref.sharedpref.setMapData(key: 'SelectedLanguage', mapData: homeController.selectedLanguage);
-                                    },child: Text('${element['name']}'),);
+                                    },child: Center(child: Text(element['lang'] == "en" ? "english".tr : element['lang'] == "hi" ? "hindi".tr : element['lang'] == "mr" ? "marathi".tr : 'gujarati'.tr)),);
                                   }).toList(),
                                   onChanged: (value) {},
                                   value: homeController.selectedLanguage['name'],

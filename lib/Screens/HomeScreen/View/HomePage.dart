@@ -213,9 +213,13 @@ class _HomePageState extends State<HomePage> {
                   child: IconButton(
                       onPressed: () async {
                         EasyLoading.show(status: "${'please_wait'.tr}...");
+                        notificationsController.selectedDate.value = DateTime.now().toIso8601String();
                         List notificationsList = (await ApiHelper.apiHelper.getAllNotificationsData())!;
+                        DateTime nowDate = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day);
                         List notificationDataList = notificationsList.where((element) {
-                          return (element['user_id'] == loginController.UserLoginData.value.id);
+                          DateTime notificationInsertDate = DateTime.parse(element['ins_date_time']);
+                          DateTime notificationDate = DateTime(notificationInsertDate.year,notificationInsertDate.month,notificationInsertDate.day);
+                          return ((element['user_id'] == loginController.UserLoginData.value.id) && (nowDate.compareTo(notificationDate) == 0));
                         }).toList();
                         notificationsController.notificationsList.value = List.from(notificationDataList.reversed);
                         Get.to(const NotificationsPage(),transition: Transition.fadeIn);
