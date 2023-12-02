@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -77,38 +79,63 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         Align(
                           alignment: Alignment.topRight,
-                          child: Container(
-                            margin: EdgeInsets.only(top: Get.width/30,right: Get.width/30),
-                            decoration: BoxDecoration(
-                              // border: Border.all(color: Colors.white),
-                                borderRadius: BorderRadius.circular(6),
-                                color: Colors.white
-                            ),
-                            padding: EdgeInsets.only(left: Get.width/30,right: (Get.width/30)),
-                            child: IntrinsicWidth(
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton(
-                                  style: const TextStyle(fontSize: 12,color: Color(0xff29B5F4)),
-                                  isExpanded: true,
-                                  isDense: true,
-                                  dropdownColor: Colors.white,
-                                  iconEnabledColor: Colors.white,
-                                  icon: const Visibility(visible:false, child: Icon(Icons.arrow_downward)),
-                                  items: homeController.languageList.map((element) {
-                                    return DropdownMenuItem(value: '${element['name']}',onTap: () {
-                                      Locale local = Locale(element['lang'],element['con']);
-                                      Get.updateLocale(local);
-                                      homeController.selectedLanguage.value = element;
-                                      SharedPref.sharedpref.setMapData(key: 'SelectedLanguage', mapData: homeController.selectedLanguage);
-                                    },child: Center(child: Text(element['lang'] == "en" ? "english".tr : element['lang'] == "hi" ? "hindi".tr : element['lang'] == "mr" ? "marathi".tr : 'gujarati'.tr)),);
-                                  }).toList(),
-                                  onChanged: (value) {},
-                                  value: homeController.selectedLanguage['name'],
+                          child: GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return BackdropFilter(
+                                    filter: ImageFilter.blur(sigmaY: 3, sigmaX: 3),
+                                    child: AlertDialog(
+                                      backgroundColor: const Color(0xff29B5F4),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: homeController.languageList
+                                            .map((e) => ElevatedButton(
+                                            onPressed: () async {
+                                              EasyLoading.show(status: "${'please_wait'.tr}...");
+                                              Locale local = Locale(e['lang'],e['con']);
+                                              Get.updateLocale(local);
+                                              homeController.selectedLanguage.value = e;
+                                              SharedPref.sharedpref.setMapData(key: 'SelectedLanguage', mapData: homeController.selectedLanguage);
+                                              Get.back();
+                                              EasyLoading.dismiss();
+                                            },
+                                            style: ElevatedButton.styleFrom(backgroundColor: Colors.white,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9))),
+                                            child: Center(
+                                              child: Row(
+                                                children: [
+                                                  Text("${e['name']}",style: const TextStyle(
+                                                    color: Color(0xFF2C2C50),
+                                                  ),),
+                                                  Text(" (${e['lang'] == 'en' ? 'English' : e['lang'] == 'mr' ? 'मराठी' : e['lang'] == 'hi' ? 'हिंदी' : 'ગુજરાતી'})",style: const TextStyle(
+                                                    color: Colors.grey,
+                                                  ),),
+                                                ],
+                                              ),
+                                            )))
+                                            .toList(),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            child: Container(
+                                margin: EdgeInsets.only(top: Get.width/30,right: Get.width/30),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(6),
+                                    color: Colors.white
                                 ),
-                              ),
+                                padding: EdgeInsets.symmetric(horizontal: (Get.width/30),vertical: Get.width/60),
+                                child: Text(
+                                  homeController.selectedLanguage['lang'] == "en" ? "english".tr : homeController.selectedLanguage['lang'] == "hi" ? "hindi".tr : homeController.selectedLanguage['lang'] == "mr" ? "marathi".tr : 'gujarati'.tr,
+                                  style: const TextStyle(fontSize: 12,color: Color(0xff29B5F4)),
+                                )
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),

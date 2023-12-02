@@ -337,6 +337,45 @@ class _LeavePageState extends State<LeavePage> {
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
+                                            Row(
+                                              children: [
+                                                const Text(
+                                                  "Leave status : ",
+                                                  style: TextStyle(color: Color(0xFF5b1aa0),
+                                                    // fontWeight: FontWeight.bold
+                                                  ),
+                                                ),
+                                                InkWell(
+                                                  onTap: homeController.leaveData[index].leaveStatus!.toLowerCase() != "rejected".toLowerCase() ? null : () {
+                                                    showDialog(context: context, builder: (context) {
+                                                      return BackdropFilter(
+                                                        filter: ImageFilter.blur(sigmaY: 3, sigmaX: 3),
+                                                        child: AlertDialog(
+                                                          title: const Text("Reason"),
+                                                          content: Text("${homeController.leaveData[index].leaveStatusReason}",style: TextStyle(fontSize: 18),),
+                                                          actions: [
+                                                            ElevatedButton(
+                                                                onPressed: () async {
+                                                                  Get.back();
+                                                                },style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF5b1aa0)),
+                                                                child: const Text("Close",style: TextStyle(color: Colors.white),)),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },);
+                                                  },
+                                                  child: Text(
+                                                    "${homeController.leaveData[index].leaveStatus}",
+                                                    style: TextStyle(
+                                                        color: homeController.leaveData[index].leaveStatus!.toLowerCase() == "pending".toLowerCase() ? Color(0xFF5b1aa0) : homeController.leaveData[index].leaveStatus!.toLowerCase() == "accepted".toLowerCase() ? Colors.green : Colors.red,
+                                                        fontWeight: FontWeight.bold,
+                                                        decoration: homeController.leaveData[index].leaveStatus!.toLowerCase() == "rejected".toLowerCase() ? TextDecoration.underline : TextDecoration.none,
+                                                        decorationColor: Colors.red
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                             FutureBuilder(
                                               future: ApiHelper.apiHelper.getLeaveDataLeaveTypeIdWise(leave_type_id: homeController.leaveData[index].leaveTypeId!),
                                               builder: (context, snapshot) {

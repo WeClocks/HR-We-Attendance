@@ -401,9 +401,16 @@ class _HomePageState extends State<HomePage> {
                                       },
                                       style: ElevatedButton.styleFrom(backgroundColor: Colors.white,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9))),
                                       child: Center(
-                                        child: Text(e['name'],style: const TextStyle(
-                                          color: Color(0xFF2C2C50),
-                                        ),),
+                                        child: Row(
+                                          children: [
+                                            Text("${e['name']}",style: const TextStyle(
+                                              color: Color(0xFF2C2C50),
+                                            ),),
+                                            Text(" (${e['lang'] == 'en' ? 'English' : e['lang'] == 'mr' ? 'मराठी' : e['lang'] == 'hi' ? 'हिंदी' : 'ગુજરાતી'})",style: const TextStyle(
+                                              color: Colors.grey,
+                                            ),),
+                                          ],
+                                        ),
                                       )))
                                       .toList(),
                                 ),
@@ -487,9 +494,16 @@ class _HomePageState extends State<HomePage> {
                                       },
                                       style: ElevatedButton.styleFrom(backgroundColor: Colors.white,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9))),
                                       child: Center(
-                                        child: Text(e['lang'] == 'en' ? 'english'.tr : e['lang'] == 'mr' ? 'marathi'.tr : e['lang'] == 'hi' ? 'hindi'.tr : 'gujarati'.tr,style: const TextStyle(
-                                          color: Color(0xFF2C2C50),
-                                        ),),
+                                        child: Row(
+                                          children: [
+                                            Text("${e['name']}",style: const TextStyle(
+                                              color: Color(0xFF2C2C50),
+                                            ),),
+                                            Text(" (${e['lang'] == 'en' ? 'English' : e['lang'] == 'mr' ? 'मराठी' : e['lang'] == 'hi' ? 'हिंदी' : 'ગુજરાતી'})",style: const TextStyle(
+                                              color: Colors.grey,
+                                            ),),
+                                          ],
+                                        ),
                                       )))
                                       .toList(),
                                 ),
