@@ -36,6 +36,8 @@ class _MapsPageState extends State<MapsPage> {
   LoginController loginController = Get.put(LoginController());
   HRTrackController hrTrackController = Get.put(HRTrackController());
   RxDouble polylineProgress = 0.0.obs;
+  RxBool playPauseStart = false.obs;
+
 
   Future<void> playPauseLocation() async {
     List<TrackingModel>? trackingDataList = await ApiHelper.apiHelper.getTrackingUserIdWise(staff_id: hrTrackController.hrTrackOrNot.value ? hrTrackController.hrAttendanceOneData['staff_id'] : loginController.UserLoginData.value.id!);
@@ -67,6 +69,7 @@ class _MapsPageState extends State<MapsPage> {
       {
         firstPunchInOutLocation.value = LatLng(double.parse(dateWiseTrackingData[0].lat!), double.parse(dateWiseTrackingData[0].long!));
         firstPunchInOutData.value = dateWiseTrackingData[0];
+        playPauseStart.value = false;
         timer.cancel();
       }
       else
@@ -207,6 +210,7 @@ class _MapsPageState extends State<MapsPage> {
 
   @override
   void initState() {
+    playPauseStart.value = false;
     circleLatLng.value = hrTrackController.hrTrackOrNot.value ? hrTrackController.userSubSiteData.value.lat == null ? LatLng(double.parse('${homeController.siteOneDropDownItem.value.lat}'), double.parse('${homeController.siteOneDropDownItem.value.longs}')) : LatLng(double.parse('${hrTrackController.userSubSiteData.value.lat}'), double.parse('${hrTrackController.userSubSiteData.value.longs}')) : homeController.subSiteOneDropDownItem.value.lat == null ? LatLng(double.parse('${homeController.siteOneDropDownItem.value.lat}'), double.parse('${homeController.siteOneDropDownItem.value.longs}')) : LatLng(double.parse('${homeController.subSiteOneDropDownItem.value.lat}'), double.parse('${homeController.subSiteOneDropDownItem.value.longs}'));
     polylineGetOrNot.value = 0;
     // getCurrentLatLog();
@@ -423,13 +427,24 @@ class _MapsPageState extends State<MapsPage> {
             ? Container()
             : Row(
           mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          // mainAxisSize: MainAxisSize.min,
           children: [
-            FloatingActionButton(
+            !playPauseStart.value ? FloatingActionButton(
               onPressed: () {
+                playPauseStart.value = true;
                 playPauseLocation();
+                // if(!playPauseStart.value)
+                //   {
+                //     playPauseLocation();
+                //   }
+                // else
+                //   {
+                //     EasyLoading.showError("Already Playing");
+                //   }
               },
-              child: Icon(Icons.play_arrow_rounded,color: Color(0xFF5b1aa0),),
-            ),
+              child: Icon(Icons.play_arrow_rounded,color: Color(0xFF5b1aa0),),)
+                : Container(),
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),

@@ -211,6 +211,7 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
                       if(snapshot.hasData)
                       {
                         LeaveTypeDataModel leaveTypeOneData = snapshot.data!.first;
+                        leaveTypeData.value = leaveTypeOneData;
                         return Text(
                           "${leaveTypeOneData.leaveTypeName} ${'leave'.tr}",
                           style: const TextStyle(
@@ -265,7 +266,7 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
                                   EasyLoading.show(status: "${'please_wait'.tr}...");
                                   await ApiHelper.apiHelper.updateOneLeaveAcceptRejectData(leaveDataModel: LeaveDataModel(
                                       leaveId: poLeaveController.leaveOneData.value.leaveId,
-                                      leaveStatus: "Accept",
+                                      leaveStatus: "Accepted",
                                       leaveStatusReason: "",
                                       leaveStatusDateTime: DateTime.now(),
                                       aprovedId: "${loginController.UserLoginData.value.id}"
@@ -380,7 +381,7 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
                                                 EasyLoading.show(status: "${'please_wait'.tr}...");
                                                 await ApiHelper.apiHelper.updateOneLeaveAcceptRejectData(leaveDataModel: LeaveDataModel(
                                                     leaveId: poLeaveController.leaveOneData.value.leaveId,
-                                                    leaveStatus: "Reject",
+                                                    leaveStatus: "Rejected",
                                                     leaveStatusReason: txtReason.text,
                                                     leaveStatusDateTime: DateTime.now(),
                                                     aprovedId: "${loginController.UserLoginData.value.id}"
