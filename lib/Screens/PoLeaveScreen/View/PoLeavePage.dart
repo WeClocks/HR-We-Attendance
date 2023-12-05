@@ -146,7 +146,7 @@ class _PoLeavePageState extends State<PoLeavePage> {
                                     return Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        FutureBuilder(future: ApiHelper.apiHelper.getStaffDataIdWish(id: poLeaveController.leaveDataList[index].userId!), builder: (context, snapshot) {
+                                        FutureBuilder(future: ApiHelper.apiHelper.getStaffDataIdWise(id: poLeaveController.leaveDataList[index].userId!), builder: (context, snapshot) {
                                           if(snapshot.hasData)
                                           {
                                             StaffModel staff = snapshot.data!.first;

@@ -522,7 +522,8 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                                   EasyLoading.show(status: "${'please_wait'.tr}...");
                                   hrController.selectedSiteData.value = hrController.siteDataList[index];
                                   hrController.selectedSiteAllAttendanceData.value = siteWiseData;
-                                  hrController.subSiteDataList.value = await ApiHelper.apiHelper.getAllSubSiteData(company_id: hrController.siteDataList[index].id!) ?? [];
+                                  hrController.staffListCompanyWise.value = await ApiHelper.apiHelper.getStaffCompanyWise(company_id: hrController.siteDataList[index].id!) ?? [];
+                                  hrController.selectedMonth.value = DateTime.now().toIso8601String();
                                   Get.to(const HRStaffAttendanceDataShowPage(),transition: Transition.fadeIn);
                                   EasyLoading.dismiss();
                                 },
@@ -728,213 +729,7 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
                                 ),
                               );
                             }
-                            return InkWell(
-                              borderRadius: BorderRadius.circular(5),
-                              onTap: () {
-                                // poAttendanceController.clusterOneData.value = poAttendanceController.poClusterAttendance[index];
-                                Get.to(const HRStaffAttendanceDataShowPage(),transition: Transition.fadeIn);
-                              },
-                              child: Container(
-                                width: Get.width,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: const Color(0xfff0e5ff),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                          color: Color(0xFF5b1aa0),
-                                          offset: Offset(0,1.5)
-                                      )
-                                    ]
-                                ),
-                                padding: EdgeInsets.all(Get.width/30),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Center(
-                                      child: Text(
-                                        // "${poAttendanceController.poClusterAttendance[index]['Cluster']}",
-                                        "${hrController.siteDataList[index].name}",
-                                        style: const TextStyle(
-                                          color: Color(0xFF5b1aa0),
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "${hrController.allAttendanceData['total'] == 0 ? 0 : ((hrController.allAttendanceData['present'] * 100) / hrController.allAttendanceData['total']).toStringAsFixed(0)}%",
-                                          style: TextStyle(
-                                            color: Colors.green.shade400,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        SizedBox(width: Get.width/60,),
-                                        Expanded(child: LinearProgressIndicator(color: Colors.green.shade400,value: hrController.allAttendanceData['total'] == 0 ? 0 : ((hrController.allAttendanceData['present']) / hrController.allAttendanceData['total']),backgroundColor: Colors.red.shade600,minHeight: 8,borderRadius: BorderRadius.circular(6),)),
-                                        SizedBox(width: Get.width/60,),
-                                        Text(
-                                          "${hrController.allAttendanceData['total'] == 0 ? 0 : ((hrController.allAttendanceData['absent'] * 100) / hrController.allAttendanceData['total']).toStringAsFixed(0)}%",
-                                          style: TextStyle(
-                                            color: Colors.red.shade600,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: Get.width/60,),
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Expanded(
-                                          child: Center(
-                                            child: Column(
-                                              children: [
-                                                Text(
-                                                  "${hrController.allAttendanceData['present']}",
-                                                  style: const TextStyle(
-                                                      color: Colors.green,
-                                                      fontWeight: FontWeight.w500,
-                                                      fontSize: 15
-                                                  ),
-                                                ),
-                                                Text(
-                                                  "present".tr,
-                                                  style: const TextStyle(
-                                                      color: Color(0xFF5b1aa0),
-                                                      fontSize: 10,
-                                                      fontWeight: FontWeight.w300
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          height: Get.width/8,
-                                          width: 1.5,
-                                          color: const Color(0xFF2C2C50),
-                                        ),
-                                        Expanded(
-                                          child: Center(
-                                            child: Column(
-                                              children: [
-                                                Text(
-                                                  "${hrController.allAttendanceData['total']}",
-                                                  style: const TextStyle(
-                                                      color: Color(0xFF5b1aa0),
-                                                      fontWeight: FontWeight.bold,
-                                                      fontSize: 17
-                                                  ),
-                                                ),
-                                                Text(
-                                                  "total".tr,
-                                                  style: const TextStyle(
-                                                      color: Color(0xFF5b1aa0),
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.w300
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          height: Get.width/8,
-                                          width: 1.5,
-                                          color: const Color(0xFF2C2C50),
-                                        ),
-                                        Expanded(
-                                          child: Center(
-                                            child: Column(
-                                              children: [
-                                                Text(
-                                                  "${hrController.allAttendanceData['absent']}",
-                                                  style: TextStyle(
-                                                      color: Colors.red.shade600,
-                                                      fontWeight: FontWeight.w500,
-                                                      fontSize: 15
-                                                  ),
-                                                ),
-                                                Text(
-                                                  "absent".tr,
-                                                  style: const TextStyle(
-                                                      color: Color(0xFF5b1aa0),
-                                                      fontSize: 10,
-                                                      fontWeight: FontWeight.w300
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    // (poAttendanceController.poClusterAttendance[index]['Total Students'] == "0" ? 0 : double.parse(poAttendanceController.poClusterAttendance[index]['Total Students']) - ((poAttendanceController.poClusterAttendance[index]['Present'] == "0" ? 0 : double.parse(poAttendanceController.poClusterAttendance[index]['Present'])) + (poAttendanceController.poClusterAttendance[index]['Absent'] == "0" ? 0 : double.parse(poAttendanceController.poClusterAttendance[index]['Absent'])))) == 0 ? const Center() : SizedBox(height: Get.width/90,),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        // (poAttendanceController.poClusterAttendance[index]['Total Students'] == "0" ? 0 :double.parse(poAttendanceController.poClusterAttendance[index]['Total Students']) - ((poAttendanceController.poClusterAttendance[index]['Present'] == "0" ? 0 : double.parse(poAttendanceController.poClusterAttendance[index]['Present'])) + (poAttendanceController.poClusterAttendance[index]['Absent'] == "0" ? 0 : double.parse(poAttendanceController.poClusterAttendance[index]['Absent'])))) == 0 ? const Center() :
-                                        hrController.allAttendanceData['absent'] == 0 ? Container() : Center(
-                                          child: Text.rich(
-                                              TextSpan(
-                                                  children: [
-                                                    TextSpan(
-                                                      text: "no_data_found".tr,
-                                                      style: const TextStyle(
-                                                          color: Color(0xFF5b1aa0),
-                                                          fontSize: 10,
-                                                          fontWeight: FontWeight.w300
-                                                      ),
-                                                    ),
-                                                    TextSpan(
-                                                      text: " ${hrController.allAttendanceData['absent']}",
-                                                      style: const TextStyle(
-                                                          color: Colors.orange,
-                                                          fontSize: 10,
-                                                          fontWeight: FontWeight.bold
-                                                      ),
-                                                    ),
-                                                    TextSpan(
-                                                      text: " ${'staff'.tr} ${'out'.tr.toLowerCase()} ${'of'.tr.toLowerCase()}",
-                                                      style: const TextStyle(
-                                                          color: Color(0xFF5b1aa0),
-                                                          fontSize: 10,
-                                                          fontWeight: FontWeight.w300
-                                                      ),
-                                                    ),
-                                                    TextSpan(
-                                                      text: " ${hrController.allAttendanceData['total']}.",
-                                                      style: const TextStyle(
-                                                          color: Color(0xFF5b1aa0),
-                                                          fontSize: 10,
-                                                          fontWeight: FontWeight.bold
-                                                      ),
-                                                    ),
-                                                  ]
-                                              )
-                                          ),
-                                        ),
-                                        SizedBox(width: Get.width/30,),
-                                        IconButton(
-                                          onPressed: () async {
-                                            EasyLoading.showError("Sorry Working Progress");
-
-                                            // EasyLoading.show(status: "Please Wait...");
-                                            // await Sharedpref.sharedpref.clusterOrSchoolsStudentsAttendanceDataPDFDownload(clusterOrSchools: true, clusterOrSchoolsName: "${poAttendanceController.poClusterAttendance[index]['Cluster']}".toUpperCase(), dateTime: DateTime.parse(poAttendanceController.selectedDataTime.value), fileName: "${poAttendanceController.poClusterAttendance[index]['Cluster']}_Cluster_Students_Attendance".toUpperCase(), yourData: poAttendanceController.poClusterAttendance[index],yourTotalData: {}).then((pdfPath) {
-                                            //   EasyLoading.dismiss();
-                                            //   EasyLoading.showSuccess("Download Successfully");
-                                            //   Get.to(PDFViewPage(pdfPath: pdfPath));
-                                            // });
-                                          },
-                                          style: IconButton.styleFrom(backgroundColor: const Color(0xFF5b1aa0)),
-                                          icon: const Icon(Icons.download,color: Colors.white,),
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            );
+                            return index == 0 ? const Center(child: CircularProgressIndicator(color: Color(0xFF5b1aa0),),) : Container();
                           },
                         ),
                       );
@@ -946,6 +741,6 @@ class _HrStaffAttendancePageState extends State<HrStaffAttendancePage> {
           ),
         ),
       ),
-    );;
+    );
   }
 }

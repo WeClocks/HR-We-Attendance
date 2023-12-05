@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
       if(gpsEnable)
       {
         try {
-          await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.lowest).then((position) async {
+          await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low).then((position) async {
             if(homeController.siteOneDropDownItem.value.name != null && homeController.subSiteOneDropDownItem.value.name != null)
             {
               double distance = Geolocator.distanceBetween(position.latitude, position.longitude, double.parse(homeController.subSiteOneDropDownItem.value.lat!), double.parse(homeController.subSiteOneDropDownItem.value.longs!));
@@ -698,7 +698,7 @@ class _HomePageState extends State<HomePage> {
                                   pointedLongitude: '${element.longs}',
                                   radiusMeter: '${element.ranges}',
                                   eventPeriodInSeconds: 2);
-                              await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.lowest).then((position) {
+                              await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low).then((position) {
                                 double distance = Geolocator.distanceBetween(position.latitude, position.longitude, double.parse(element.lat!), double.parse(element.longs!));
                                 homeController.officeInOrOut.value = (distance <= double.parse(element.ranges!));
                                 print("========== distanceeeeeeeeeeeee $distance");

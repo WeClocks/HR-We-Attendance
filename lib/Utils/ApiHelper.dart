@@ -41,7 +41,7 @@ class ApiHelper {
     return null;
   }
 
-  Future<List<StaffModel>?> getStaffDataIdWish({required String id})
+  Future<List<StaffModel>?> getStaffDataIdWise({required String id})
   async {
     String apiLink = "https://weclockstechnology.com/flutter_api/fatch_staffdata_id_wish.php";
     var response = await http.post(Uri.parse(apiLink),body: {"id":id});
@@ -673,6 +673,34 @@ class ApiHelper {
       List jsonData = jsonDecode(response.body);
 
       return jsonData.isEmpty ? null : StaffDataModel.fromJson(jsonData.last);
+    }
+    return null;
+  }
+
+  Future<List?> getStaffCompanyWise({required String company_id})
+  async {
+    String apiLink = "https://weclockstechnology.com/flutter_api/fatch_staff_joining_company_wise.php";
+    var response = await http.post(Uri.parse(apiLink),body: {"company_id": company_id});
+
+    if(response.statusCode == 200)
+    {
+      List jsonData = jsonDecode(response.body);
+
+      return jsonData;
+    }
+    return null;
+  }
+
+  Future<int?> getStaffAttendanceCompanyAndMonthWise({required String staff_id, required DateTime date})
+  async {
+    String apiLink = "https://weclockstechnology.com/flutter_api/fatch_attendance_month_wise.php";
+    var response = await http.post(Uri.parse(apiLink),body: {"staff_id": staff_id, 'date': DateFormat('yyyy-MM-dd').format(date)});
+
+    if(response.statusCode == 200)
+    {
+      int jsonData = jsonDecode(response.body);
+
+      return jsonData;
     }
     return null;
   }
