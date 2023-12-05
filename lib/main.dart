@@ -47,10 +47,10 @@ async {
     print("=============setAsBackgroundsetAsBackgroundsetAsBackground");
   });
 
-  serviceInstance.on("stopService").listen((event) {
-    print("=============stopServicestopServicestopService");
-    serviceInstance.stopSelf();
-  });
+  // serviceInstance.on("stopService").listen((event) {
+  //   print("=============stopServicestopServicestopService");
+  //   serviceInstance.stopSelf();
+  // });
 
   tracking();
   // Timer.periodic(const Duration(seconds: 15), (timer) async {
@@ -97,7 +97,7 @@ async {
                 bool gpsEnable = await Geolocator.isLocationServiceEnabled();
                 if(gpsEnable)
                 {
-                  await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.lowest,).then((position) async {
+                  await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low,).then((position) async {
                     // await DBHelper.dbHelper.readTrackingDataDateWise(dateTime: homeController.weAttendanceOneData.value.inDateTime == null ? DateTime.now() : homeController.weAttendanceOneData.value.inDateTime!).then((trackingOneData) async
                     TrackingModel? trackingDataDateWiseModel = await DBHelper.dbHelper.readTrackingDataDateWise(dateTime: DateTime.now());
                     print("========== ~~~~~~~offfffffffffpooooooooooo $position $trackingDataDateWiseModel");
@@ -236,7 +236,7 @@ async {
               bool gpsEnable = await Geolocator.isLocationServiceEnabled();
               if(gpsEnable)
               {
-                await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.lowest,).then((position) async {
+                await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low,).then((position) async {
                   // await DBHelper.dbHelper.readTrackingDataDateWise(dateTime: homeController.weAttendanceOneData.value.inDateTime == null ? DateTime.now() : homeController.weAttendanceOneData.value.inDateTime!).then((trackingOneData) async
                   await ApiHelper.apiHelper.getTrackingUserIdWise(staff_id: loginController.UserLoginData.value.id!).then((trackingDataList) async
                   {

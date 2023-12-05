@@ -142,7 +142,7 @@ class _PoLeaveDataShowPageState extends State<PoLeaveDataShowPage> {
                     ],
                   ),
                   FutureBuilder(
-                    future: ApiHelper.apiHelper.getStaffDataIdWish(id: poLeaveController.leaveOneData.value.userId!),
+                    future: ApiHelper.apiHelper.getStaffDataIdWise(id: poLeaveController.leaveOneData.value.userId!),
                     builder: (context, snapshot) {
                       if(snapshot.hasData)
                       {

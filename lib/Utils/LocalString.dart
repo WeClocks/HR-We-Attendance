@@ -138,6 +138,7 @@ class LocalString extends Translations
     'mr_IN':{
       'fieldstafftrackingsystem':'फील्ड स्टाफ ट्रॅकिंग सिस्टम',
       'login':'लॉगिन',
+      'login_hr':'लॉगिन-HR',
       'username':'वापरकर्तानाव',
       'pleaseenterusername':'कृपया वापरकर्तानाव प्रविष्ट करा',
       'password':'पासवर्ड',
@@ -266,7 +267,8 @@ class LocalString extends Translations
     },
     'hi_IN':{
       'fieldstafftrackingsystem':'फील्ड स्टाफ ट्रैकिंग सिस्टम',
-      'login':'लॉग इन करें',
+      'login':'लॉगिन',
+      'login_hr':'लॉगिन-HR',
       'username':'उपयोगकर्ता नाम',
       'pleaseenterusername':'कृपया उपयोगकर्ता नाम दर्ज करें',
       'password':'पासवर्ड',
@@ -395,7 +397,8 @@ class LocalString extends Translations
     },
     'guj_IN':{
       'fieldstafftrackingsystem':'ફિલ્ડ સ્ટાફ ટ્રેકિંગ સિસ્ટમ',
-      'login':'પ્રવેશ કરો',
+      'login':'પ્રવેશ',
+      'login_hr':'પ્રવેશ-HR',
       'username':'વપરાશકર્તા નામ',
       'pleaseenterusername':'કૃપા કરીને વપરાશકર્તા નામ દાખલ કરો',
       'password':'પાસવર્ડ',
