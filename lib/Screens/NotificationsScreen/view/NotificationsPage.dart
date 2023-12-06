@@ -73,7 +73,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
           shrinkWrap: true,
           itemBuilder: (context, index) {
             return Padding(
-              padding: EdgeInsets.only(right: Get.width/30, left: Get.width/30,top: Get.width/30, bottom: index == 0 ? Get.width/30 : 0),
+              padding: EdgeInsets.only(right: Get.width/30, left: Get.width/30,top: Get.width/30, bottom: index == (notificationsController.notificationsList.length-1) ? Get.width/30 : 0),
               child: Container(
                 width: Get.width,
                 padding: EdgeInsets.all(Get.width / 30),
