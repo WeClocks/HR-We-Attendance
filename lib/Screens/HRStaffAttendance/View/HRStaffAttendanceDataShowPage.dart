@@ -26,8 +26,8 @@ class _HRStaffAttendanceDataShowPageState extends State<HRStaffAttendanceDataSho
       child: Scaffold(
         appBar: AppBar(
           iconTheme: const IconThemeData(color: Color(0xFF5b1aa0)),
-          title: Text(
-            "Staff Attendance",
+          title: const Text(
+            "Monthly Staff Attendance",
             style: TextStyle(color: Color(0xFF5b1aa0), fontSize: 13),
           ),
           centerTitle: true,
@@ -150,27 +150,29 @@ class _HRStaffAttendanceDataShowPageState extends State<HRStaffAttendanceDataSho
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            // "0",
-                            "Site",
-                            style: const TextStyle(
-                                color: Color(0xFF5b1aa0),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w300
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              // "0",
+                              "Site",
+                              style: const TextStyle(
+                                  color: Color(0xFF5b1aa0),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w300
+                              ),
                             ),
-                          ),
-                          Text(
-                            "${hrController.selectedSiteData.value.name}",
-                            style: const TextStyle(
-                                color: Color(0xFF5b1aa0),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
+                            Text(
+                              "${hrController.selectedSiteData.value.name}",
+                              style: const TextStyle(
+                                  color: Color(0xFF5b1aa0),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       InkWell(
                         onTap: () async {

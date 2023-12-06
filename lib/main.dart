@@ -99,7 +99,7 @@ async {
                 {
                   await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low,).then((position) async {
                     // await DBHelper.dbHelper.readTrackingDataDateWise(dateTime: homeController.weAttendanceOneData.value.inDateTime == null ? DateTime.now() : homeController.weAttendanceOneData.value.inDateTime!).then((trackingOneData) async
-                    TrackingModel? trackingDataDateWiseModel = await DBHelper.dbHelper.readTrackingDataDateWise(dateTime: DateTime.now());
+                    TrackingModel? trackingDataDateWiseModel = await DBHelper.dbHelper.readTrackingDataDateWise(dateTime: DateTime.now(),staff_id: loginController.UserLoginData.value.id!,);
                     print("========== ~~~~~~~offfffffffffpooooooooooo $position $trackingDataDateWiseModel");
                     if(trackingDataDateWiseModel == null)
                     {
@@ -202,7 +202,7 @@ async {
                 else
                 {
                   // await DBHelper.dbHelper.readTrackingDataDateWise(dateTime: homeController.weAttendanceOneData.value.inDateTime == null ? DateTime.now() : homeController.weAttendanceOneData.value.inDateTime!).then((trackingOneData) async
-                  TrackingModel? trackingDataDateWiseModel = await DBHelper.dbHelper.readTrackingDataDateWise(dateTime: DateTime.now());
+                  TrackingModel? trackingDataDateWiseModel = await DBHelper.dbHelper.readTrackingDataDateWise(dateTime: DateTime.now(),staff_id: loginController.UserLoginData.value.id!,);
 
                   if(trackingDataDateWiseModel == null)
                   {

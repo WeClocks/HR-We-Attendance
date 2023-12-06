@@ -16,9 +16,9 @@ class DBHelper
   Future<Database?> checkDb()
   async {
     if(database != null)
-      {
-        return database;
-      }
+    {
+      return database;
+    }
     return await createDB();
   }
 
@@ -90,9 +90,9 @@ class DBHelper
     List punchInOutList = await database!.rawQuery(readPunchInOutQuery);
 
     if(punchInOutList.isNotEmpty)
-      {
-        return punchInOutList.map((e) => PunchInOutDataModel.fromJson(e)).toList();
-      }
+    {
+      return punchInOutList.map((e) => PunchInOutDataModel.fromJson(e)).toList();
+    }
     return null;
   }
 
@@ -104,11 +104,11 @@ class DBHelper
 
     List punchInOutList = await database!.rawQuery(readPunchInOutQuery);
     if(punchInOutList.isNotEmpty)
-      {
-        List<PunchInOutDataModel> punchInOutDataList =  punchInOutList.map((e) => PunchInOutDataModel.fromJson(e)).toList();
-        List<PunchInOutDataModel> finalPunchInOutDataList = punchInOutDataList.where((element) => DateTime(element.clockIn!.year,element.clockIn!.month,element.clockIn!.day).compareTo(DateTime(dateTime.year,dateTime.month,dateTime.day)) == 0).toList();
-        return finalPunchInOutDataList.isNotEmpty ? finalPunchInOutDataList.last : null;
-      }
+    {
+      List<PunchInOutDataModel> punchInOutDataList =  punchInOutList.map((e) => PunchInOutDataModel.fromJson(e)).toList();
+      List<PunchInOutDataModel> finalPunchInOutDataList = punchInOutDataList.where((element) => DateTime(element.clockIn!.year,element.clockIn!.month,element.clockIn!.day).compareTo(DateTime(dateTime.year,dateTime.month,dateTime.day)) == 0).toList();
+      return finalPunchInOutDataList.isNotEmpty ? finalPunchInOutDataList.last : null;
+    }
     return null;
   }
 
@@ -151,7 +151,7 @@ class DBHelper
   }
 
 
-  Future<TrackingModel?> readTrackingDataDateWise({required DateTime dateTime})
+  Future<TrackingModel?> readTrackingDataDateWise({required DateTime dateTime, required String staff_id})
   async {
     database = await checkDb();
 
@@ -162,7 +162,23 @@ class DBHelper
     if(trackingList.isNotEmpty)
     {
       List<TrackingModel> trackingDataList =  trackingList.map((e) => TrackingModel.fromJson(e)).toList();
-      return trackingDataList.where((element) => DateTime(element.createdAt!.year,element.createdAt!.month,element.createdAt!.day).compareTo(DateTime(dateTime.year,dateTime.month,dateTime.day))  == 0).toList().last;
+      return trackingDataList.where((element) => (DateTime(element.createdAt!.year,element.createdAt!.month,element.createdAt!.day).compareTo(DateTime(dateTime.year,dateTime.month,dateTime.day)) == 0 && element.staffId == staff_id)).toList().isEmpty ? null : trackingDataList.where((element) => (DateTime(element.createdAt!.year,element.createdAt!.month,element.createdAt!.day).compareTo(DateTime(dateTime.year,dateTime.month,dateTime.day)) == 0 && element.staffId == staff_id)).toList().last;
+    }
+    return null;
+  }
+
+  Future<List<TrackingModel>?> readTrackingDataListDateWise({required DateTime dateTime, required String staff_id})
+  async {
+    database = await checkDb();
+
+    String readPunchInOutQuery = "SELECT * FROM tracking";
+
+    List trackingList = await database!.rawQuery(readPunchInOutQuery);
+
+    if(trackingList.isNotEmpty)
+    {
+      List<TrackingModel> trackingDataList =  trackingList.map((e) => TrackingModel.fromJson(e)).toList();
+      return trackingDataList.where((element) => (DateTime(element.createdAt!.year,element.createdAt!.month,element.createdAt!.day).compareTo(DateTime(dateTime.year,dateTime.month,dateTime.day)) == 0 && element.staffId == staff_id)).toList();
     }
     return null;
   }

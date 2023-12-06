@@ -999,6 +999,11 @@ class _HomePageState extends State<HomePage> {
                                                       clockOutAddress: (place.isNotEmpty && place.length >= 2) ? "${place[2].name},${place[0].street},${place[1].subLocality},${place[2].locality},${place[2].postalCode}" : "",
                                                       updatedAt: dateTime,
                                                     )).then((value) async {
+                                                      List<TrackingModel> offlineTrackingList = await DBHelper.dbHelper.readTrackingDataListDateWise(dateTime: DateTime.now(),staff_id: loginController.UserLoginData.value.id!,) ?? [];
+                                                      for(int i=0; i<offlineTrackingList.length;)
+                                                      {
+                                                        await ApiHelper.apiHelper.insertTrackingData(trackingModel: offlineTrackingList[i]).then((value) => i++);
+                                                      }
                                                       await ApiHelper.apiHelper.insertTrackingData(trackingModel: TrackingModel(staffId: loginController.UserLoginData.value.id!,gpsActive: "On",createdAt: DateTime.now(),updatedAt: DateTime.now(),long: position.longitude.toString(),lat: position.latitude.toString()));
                                                       await loginController.initializeService();
                                                       circulerOnOff.value = 0;
