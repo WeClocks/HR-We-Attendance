@@ -53,7 +53,7 @@ class _PoLeavePageState extends State<PoLeavePage> {
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: ["Pending","Accept","Reject"]
+                            children: ["Pending","Accepted","Rejected"]
                                 .map((e) => ElevatedButton(
                                 onPressed: () async {
                                   EasyLoading.show(status: "Please Wait....");

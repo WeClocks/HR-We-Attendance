@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                         // mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(height: Get.width/10),
-                          Text("login".tr,style: const TextStyle(color: Colors.orange,fontSize: 18,fontWeight: FontWeight.bold),),
+                          Text("login_hr".tr,style: const TextStyle(color: Colors.orange,fontSize: 18,fontWeight: FontWeight.bold),),
                           SizedBox(height: Get.width/10),
                           Padding(
                             padding: EdgeInsets.only(left: Get.width/20, right: Get.width/20),
